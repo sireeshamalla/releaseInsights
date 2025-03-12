@@ -2,6 +2,8 @@ package com.example.releaseInsights.service;
 
 import com.example.releaseInsights.config.GitHubConfig;
 import org.kohsuke.github.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.Map;
 
 @Service
 public class GitHubCompareService {
+    private static final Logger logger = LoggerFactory.getLogger(GitHubBranchService.class);
 
     private final GitHubConfig gitHubConfig;
     private final GoogleAiService googleAiService;
@@ -22,7 +25,7 @@ public class GitHubCompareService {
     public String getBranchDiff( String baseBranch, String newBranch) throws IOException {
         GitHub github = new GitHubBuilder().withOAuthToken(gitHubConfig.getToken()).build();
         GHRepository repository = github.getRepository(gitHubConfig.getRepoOwner() + "/" + gitHubConfig.getRepoName());
-
+        logger.info("Calling getCompare for branches: {} and {}", baseBranch, newBranch);
         // Get comparison between branches
         GHCompare compare = repository.getCompare(baseBranch, newBranch);
 
