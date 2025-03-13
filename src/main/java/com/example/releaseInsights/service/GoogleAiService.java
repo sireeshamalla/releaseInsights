@@ -32,6 +32,8 @@ public class GoogleAiService {
                         "Note: Always prioritize clarity and conciseness."
         );
         logger.info("systemprompt: " + systemPrompt);
+        logger.info("systemprompt: " + systemPrompt);
+
         return aiClient.callApi(systemPrompt, codeDiff);
     }
 }
