@@ -21,13 +21,12 @@ public class ReleaseAnalysisJob {
     }
 
     @Scheduled(cron = "0 0 * * *") // Runs every hour, adjust as needed
-    public void analyzeLatestRelease() throws IOException {
+    public String analyzeLatestRelease() throws IOException {
         logger.info("Starting release analysis job");
-        String owner = "example-org";
-        String repo = "example-repo";
 
         String summary = gitHubService.analyzeLatestReleaseChanges();
 
         System.out.println("Release Summary: \n" + summary);
+        return summary;
     }
 }

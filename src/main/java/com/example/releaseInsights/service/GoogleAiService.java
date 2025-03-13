@@ -1,5 +1,7 @@
 package com.example.releaseInsights.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.releaseInsights.client.AiClient;
@@ -8,6 +10,8 @@ import java.io.IOException;
 
 @Service
 public class GoogleAiService {
+    private static final Logger logger = LoggerFactory.getLogger(GoogleAiService.class);
+
     @Autowired
     private AiClient aiClient;
 
@@ -27,6 +31,7 @@ public class GoogleAiService {
                         "\n" +
                         "Note: Always prioritize clarity and conciseness."
         );
+        logger.info("systemprompt: " + systemPrompt);
         return aiClient.callApi(systemPrompt, codeDiff);
     }
 }

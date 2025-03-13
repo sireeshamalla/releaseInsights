@@ -1,0 +1,29 @@
+name: Release Build
+
+on:
+  create:
+    branches:
+      - 'release/**'
+
+jobs:
+  analyze-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Release Analysis
+        run: ./scripts/release_analysis.sh
+
+      - name: Send Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_PASSWORD }}
+          subject: Release Summary
+          to: sashanka2710@gmail.com
+          from: ${{ secrets.GMAIL_USERNAME }}
+          body: ${{ steps.get-summary.outputs.summary }}
