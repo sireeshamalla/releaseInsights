@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Getter
 public class GitHubConfig {
-
+//TODO added this comment for testing
     private String token;
     private String repoOwner;
     private String repoName;

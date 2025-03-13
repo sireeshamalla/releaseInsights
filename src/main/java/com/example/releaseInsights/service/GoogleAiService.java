@@ -1,5 +1,6 @@
 package com.example.releaseInsights.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.releaseInsights.client.AiClient;
 
@@ -7,7 +8,7 @@ import java.io.IOException;
 
 @Service
 public class GoogleAiService {
-
+    @Autowired
     private AiClient aiClient;
 
     public String summarizeCodeDiff(String codeDiff) throws IOException {

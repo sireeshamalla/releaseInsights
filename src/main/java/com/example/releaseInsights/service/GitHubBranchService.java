@@ -2,6 +2,8 @@ package com.example.releaseInsights.service;
 
 import com.example.releaseInsights.config.GitHubConfig;
 import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,6 +20,8 @@ import java.util.regex.Pattern;
 
 @Service
 public class GitHubBranchService {
+    private static final Logger logger = LoggerFactory.getLogger(GitHubBranchService.class);
+
     private static final String GITHUB_API_URL = "https://api.github.com/repos/%s/%s/branches";
     private final GitHubConfig gitHubConfig;
 
@@ -27,17 +31,21 @@ public class GitHubBranchService {
 
     public List<String> getLatestReleaseBranches() {
         String url = String.format(GITHUB_API_URL, gitHubConfig.getRepoOwner(), gitHubConfig.getRepoName());
+        logger.info("Requesting URL: {}", url);
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "token " + gitHubConfig.getToken());
-        headers.set("Accept", "application/vnd.github.v3+json");
+//        headers.set("Accept", "application/vnd.github.v3+json");
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        logger.info("Response status: {}", response.getStatusCode());
 
-        JSONArray branches = new JSONArray(response.getBody());
-        List<String> releaseBranches = new ArrayList<>();
+        if (response.getStatusCode().is2xxSuccessful()) {
+
+            JSONArray branches = new JSONArray(response.getBody());
+            List<String> releaseBranches = new ArrayList<>();
 
         // Extract release branches matching "release-X.Y"
         Pattern pattern = Pattern.compile("release-\\d+\\.\\d+");
@@ -55,5 +63,9 @@ public class GitHubBranchService {
         return releaseBranches.size() >= 2
                 ? Arrays.asList(releaseBranches.get(0), releaseBranches.get(1))
                 : Collections.emptyList();
+        } else {
+            logger.error("Failed to fetch branches: {}", response.getStatusCode());
+            return Collections.emptyList();
+        }
     }
 }
