@@ -46,7 +46,7 @@ for file in $changed_files; do
     # Call Gemini AI to get the summary of the changes
     summary=$(curl -s -X POST -H "Content-Type: application/json" \
       -d "{\"prompt\": \"$prompt_message\"}" \
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-001:generateContent??key=$GOOGLE_API_KEY")
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-001:generateContent??key=$GEMINI_API_KEY")
 
     echo "Summary: $summary"
 
