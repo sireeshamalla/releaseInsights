@@ -5,6 +5,7 @@ on:
     branches:
       - 'release/**'
   workflow_dispatch:
+
 jobs:
   analyze-release:
     runs-on: ubuntu-latest
