@@ -28,6 +28,7 @@ public class GitHubCompareService {
         logger.info("Calling getCompare for branches: {} and {}", baseBranch, newBranch);
         logger.info("added for testing");
         logger.info("added for testing");
+        logger.info("added for testing");
 
 
         // Get comparison between branches

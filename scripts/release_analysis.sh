@@ -60,8 +60,10 @@ for file in "${!summary_map[@]}"; do
   summary_string+="File: $file\nSummary: ${summary_map[$file]}\n\n"
 done
 
-# Output the summary for GitHub Actions
-echo "::set-output name=summary::$summary_string"
+# Output the summary for GitHub Actions using Environment Files
+echo "summary<<EOF" >> $GITHUB_ENV
+echo -e "$summary_string" >> $GITHUB_ENV
+echo "EOF" >> $GITHUB_ENV
 
 # Disable debug mode
 set +x
