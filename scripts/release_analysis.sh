@@ -47,10 +47,11 @@ for file in $changed_files; do
       -d "{\"codeDiff\": \"$prompt_message\"}" \
       "https://gemini-ai-api-url/summarize")
 
-  echo "Summary: $summary"
+    echo "Summary: $summary"
 
   # Save summary in the map
-  summary_map["$file"]="$summary"
+    summary_map["$file"]="$summary"
+  fi
 done
 
 # Create a string using string builder
