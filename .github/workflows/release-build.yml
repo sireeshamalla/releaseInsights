@@ -16,11 +16,11 @@ jobs:
 
       - name: Set execute permissions
         run: chmod +x ./scripts/release_analysis.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Run Release Analysis
         run: ./scripts/release_analysis.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
