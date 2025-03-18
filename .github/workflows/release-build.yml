@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set execute permissions
+        run: chmod +x ./scripts/release_analysis.sh
+
       - name: Run Release Analysis
         run: ./scripts/release_analysis.sh
 

@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 @Service
 public class GitHubBranchService {
     private static final Logger logger = LoggerFactory.getLogger(GitHubBranchService.class);
+    logger.info("Added for testing");
 
     private static final String GITHUB_API_URL = "https://api.github.com/repos/%s/%s/branches";
     private final GitHubConfig gitHubConfig;
@@ -30,6 +31,8 @@ public class GitHubBranchService {
     }
 
     public List<String> getLatestReleaseBranches() {
+        logger.info("Added for testing");
+
         String url = String.format(GITHUB_API_URL, gitHubConfig.getRepoOwner(), gitHubConfig.getRepoName());
         logger.info("Requesting URL: {}", url);
 
