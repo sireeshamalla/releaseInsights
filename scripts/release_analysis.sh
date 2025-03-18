@@ -25,9 +25,10 @@ echo "Latest release: $latest_release"
 echo "Previous release: $previous_release"
 
 echo "Fetching changed files..."
-# Get the list of changed files between the latest and previous release
-changed_files=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/compare/$previous_release...$latest_release" | jq -r '.files[].filename')
+# Get the comparison between the latest and previous release
+compare_url="https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/compare/$previous_release...$latest_release"
+compare_response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$compare_url")
+changed_files=$(echo "$compare_response" | jq -r '.files[].filename')
 
 echo "Changed files: $changed_files"
 
