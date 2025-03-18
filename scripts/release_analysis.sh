@@ -4,7 +4,6 @@
 set -x
 
 # GitHub API token
-GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 REPO_OWNER="sireeshamalla"
 REPO_NAME="releaseInsights"
 

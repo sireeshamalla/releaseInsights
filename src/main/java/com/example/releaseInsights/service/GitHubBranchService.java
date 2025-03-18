@@ -30,7 +30,7 @@ public class GitHubBranchService {
     }
 
     public List<String> getLatestReleaseBranches() {
-        logger.info("Added for testing");
+        //logger.info("Added for testing");
 
         String url = String.format(GITHUB_API_URL, gitHubConfig.getRepoOwner(), gitHubConfig.getRepoName());
         logger.info("Requesting URL: {}", url);
