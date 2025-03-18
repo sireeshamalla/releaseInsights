@@ -9,13 +9,10 @@ REPO_NAME="releaseInsights"
 
 echo "Fetching all branches..."
 # Get all branches
-branches_json=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/branches")
+branches=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+  "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/branches" | jq -r '.[].name')
 
-echo "Branches JSON: $branches_json"
-
-# Extract branch names
-branches=$(echo "$branches_json" | jq -r '.[].name')
+echo "Branches fetched: $branches"
 
 # Sort branches and get the latest 2 releases
 latest_branches=$(echo "$branches" | grep 'release/' | sort -r | head -n 2)
