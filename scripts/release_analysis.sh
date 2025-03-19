@@ -36,6 +36,9 @@ while :; do
   # Increment the page number
   PAGE=$((PAGE + 1))
 done
+
+echo "Branches fetched: ${branches[@]}"
+
 # Sort branches and get the latest 2 releases
 latest_branches=$(echo "{branches[@]}" | tr ' ' '\n' | grep 'release-' | sort -r | head -n 2)
 echo "Latest branches: $latest_branches"
