@@ -44,10 +44,28 @@ for file in $changed_files; do
     # Create a detailed prompt message
     prompt_message="You are an intelligent code analysis assistant. Your task is to generate a concise summary of the provided code difference (diff) for a file.\n\nInstructions:\n1. Analyze the provided code diff and identify the key changes.\n2. Summarize the changes in a clear and concise manner.\n3. Focus on the most significant modifications, additions, and deletions.\n4. Ensure the summary is easy to understand and provides a high-level overview of the changes.\n\nOutput Format:- [Summary of the key changes in the code diff]\n\nNote: Always prioritize clarity and conciseness.\n\n$patch\"}"
     # Call Gemini AI to get the summary of the changes
-    summary=$(curl -s -X POST -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $GEMINI_API_KEY" \
-      -d "{\"prompt\": \"$prompt_message\"}" \
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-001:generateContent")
+    summary=$(curl \
+                -X POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY} \
+                -H 'Content-Type: application/json' \
+                -d @<(echo '{
+                "contents": [
+                  {
+                    "role": "user",
+                    "parts": [
+                      {
+                        "text": \"$prompt_message\"
+                      }
+                    ]
+                  }
+                ],
+                "generationConfig": {
+                  "temperature": 1,
+                  "topK": 40,
+                  "topP": 0.95,
+                  "maxOutputTokens": 8192,
+                  "responseMimeType": "text/plain"
+                }
+              }'))
 
     echo "Summary: $summary"
 
