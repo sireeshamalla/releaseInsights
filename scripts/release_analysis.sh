@@ -75,7 +75,7 @@ for file in $changed_files; do
               }'))
 
     echo "Summary: $summary"
-    text=$(echo "$response" | jq -r '.candidates[0].content.parts[0].text')
+    text=$(echo "$summary" | jq -r '.candidates[0].content.parts[0].text')
 
   # Save summary in the map
     summary_map[$file]=$text
