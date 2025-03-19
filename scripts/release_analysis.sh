@@ -11,13 +11,31 @@ fi
 REPO_OWNER="sireeshamalla"
 REPO_NAME="releaseInsights"
 
+
 echo "Fetching all branches..."
-# Get all branches
-branches=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/branches" | jq -r '.[].name')
+# Get all branches with pagination
+PER_PAGE=100
+PAGE=1
+branches=()
 
-echo "Branches fetched: $branches"
+while :; do
+  response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+    "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/branches?per_page=$PER_PAGE&page=$PAGE")
 
+  # Extract branch names
+  branch_names=$(echo "$response" | jq -r '.[].name')
+
+  # Break the loop if no more branches are returned
+  if [ -z "$branch_names" ]; then
+    break
+  fi
+
+  # Append branch names to the array
+  branches+=($branch_names)
+
+  # Increment the page number
+  PAGE=$((PAGE + 1))
+done
 # Sort branches and get the latest 2 releases
 latest_branches=$(echo "$branches" | grep 'release-' | sort -r | head -n 2)
 echo "Latest branches: $latest_branches"
