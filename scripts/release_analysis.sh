@@ -2,7 +2,11 @@
 
 # Enable debug mode
 set -x
-
+# Check if GEMINI_API_KEY is set
+if [ -z "$GEMINI_API_KEY" ]; then
+  echo "Error: GEMINI_API_KEY is not set."
+  exit 1
+fi
 # GitHub API token
 REPO_OWNER="sireeshamalla"
 REPO_NAME="releaseInsights"
