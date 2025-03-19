@@ -26,6 +26,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Use Summary
+        run:
+          echo "Summary: $summary"
+        env:
+          summary: ${{ env.summary }}
+
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -36,4 +42,4 @@ jobs:
           subject: Release Summary
           to: sashanka2710@gmail.com
           from: ${{ secrets.GMAIL_USERNAME }}
-          body: ${{ steps.get-summary.outputs.summary }}
+          body: ${{ env.summary }}

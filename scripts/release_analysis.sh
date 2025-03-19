@@ -86,6 +86,7 @@ summary_string=""
 for file in "${!summary_map[@]}"; do
   summary_string+="File: $file\nSummary: ${summary_map[$file]}\n\n"
 done
+echo "Complete Summary: $summary_string"
 
 # Output the summary for GitHub Actions using Environment Files
 echo "summary<<EOF" >> $GITHUB_ENV
