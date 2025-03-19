@@ -21,6 +21,7 @@ jobs:
         run: ./scripts/release_analysis.sh
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
