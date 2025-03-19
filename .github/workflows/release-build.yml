@@ -34,6 +34,6 @@ jobs:
           username: ${{ secrets.GMAIL_USERNAME }}
           password: ${{ secrets.GMAIL_PASSWORD }}
           subject: Release Summary
-          to: shasanka2710@gmail.com
+          to: sireesha.malla@gmail.com
           from: ${{ secrets.GMAIL_USERNAME }}
           body: ${{ env.summary }}
