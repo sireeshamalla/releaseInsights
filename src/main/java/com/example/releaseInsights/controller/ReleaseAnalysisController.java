@@ -30,6 +30,7 @@ public class ReleaseAnalysisController {
     @GetMapping("/branches")
     public ResponseEntity<Map<String, Boolean>>  branches() throws IOException {
         logger.info("calling release analysis job");
+        logger.info("added for github actions testing");
         //String summary = releaseAnalysisJob.analyzeLatestRelease();
         return ResponseEntity.ok(Map.of("success", true));    }
 }
