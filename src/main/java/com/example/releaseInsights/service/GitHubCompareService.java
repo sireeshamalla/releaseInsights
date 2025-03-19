@@ -29,6 +29,7 @@ public class GitHubCompareService {
         logger.info("added for testing");
         logger.info("added for testing");
         logger.info("added for testing");
+        logger.info("added for testing");
 
         // Get comparison between branches
         GHCompare compare = repository.getCompare(baseBranch, newBranch);
