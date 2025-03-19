@@ -26,6 +26,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Prepare HTML Table
+        id: prepare_table
+        run: |
+          summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
+          while IFS='=' read -r file summary; do
+            summary_table+="<tr><td>${file}</td><td>${summary}</td></tr>"
+          done < <(env | grep '^summary_map_' | sed 's/^summary_map_//')
+          summary_table+="</table>"
+          echo "::set-output name=summary_table::${summary_table}"
+
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -36,4 +46,5 @@ jobs:
           subject: Release Summary
           to: sireesha.malla@gmail.com
           from: ${{ secrets.GMAIL_USERNAME }}
-          body: ${{ env.summary }}
+          content_type: text/html
+          body: ${{ steps.prepare_table.outputs.summary_table }}
