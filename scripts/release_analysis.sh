@@ -40,7 +40,7 @@ done
 echo "Branches fetched: ${branches[@]}"
 
 # Sort branches and get the latest 2 releases
-latest_branches=$(echo "{branches[@]}" | tr ' ' '\n' | grep 'release-' | sort -r | head -n 2)
+latest_branches=$(echo "${branches[@]}" | tr ' ' '\n' | grep 'release-' | sort -r | head -n 2)
 echo "Latest branches: $latest_branches"
 
 # Get the latest release branch
