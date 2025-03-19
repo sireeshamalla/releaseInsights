@@ -111,11 +111,11 @@ done
 echo "Complete Summary: $summary_string"
 
 # Output the summary for GitHub Actions using Environment Files
-#echo "summary_map<<EOF" >> $GITHUB_ENV
+echo "<<EOF" >> $GITHUB_ENV
 for file in "${!summary_map[@]}"; do
   echo "summary_map_${file}=${summary_map[$file]}" >> $GITHUB_ENV
 done
-#echo "EOF" >> $GITHUB_ENV
+echo "EOF" >> $GITHUB_ENV
 
 # Disable debug mode
 set +x
