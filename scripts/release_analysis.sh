@@ -103,20 +103,10 @@ for file in $changed_files; do
   fi
 done
 
-# Create a string using string builder
-summary_string=""
-for file in "${!summary_map[@]}"; do
-  summary_string+="File: $file\nSummary: ${summary_map[$file]}\n\n"
-done
-echo "Complete Summary: $summary_string"
-
 # Output the summary for GitHub Actions using Environment Files
-# added for testing
-echo "summary_map<<EOF" >> $GITHUB_ENV
 for file in "${!summary_map[@]}"; do
   echo "summary_map_${file}|${summary_map[$file]}" >> $GITHUB_ENV
 done
-echo "EOF" >> $GITHUB_ENV
 
 # Disable debug mode
 set +x
