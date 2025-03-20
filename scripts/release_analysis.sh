@@ -114,7 +114,7 @@ echo "Complete Summary: $summary_string"
 # added for testing
 echo "summary_map<<EOF" >> $GITHUB_ENV
 for file in "${!summary_map[@]}"; do
-  echo "summary_map_${file}:${summary_map[$file]}" >> $GITHUB_ENV
+  echo "summary_map_${file}|${summary_map[$file]}" >> $GITHUB_ENV
 done
 echo "EOF" >> $GITHUB_ENV
 
