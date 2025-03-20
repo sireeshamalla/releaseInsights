@@ -35,6 +35,7 @@ jobs:
             summary_table+="<tr><td>${file}</td><td>${summary}</td></tr>"
           done
           summary_table+="</table>"
+          echo "Summary Table: ${summary_table}"  # Print the summary table
           echo "::set-output name=summary_table::${summary_table}"
 
       - name: Send Email
