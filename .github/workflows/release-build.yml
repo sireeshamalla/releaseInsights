@@ -44,8 +44,7 @@ jobs:
         run: ./scripts/call_gemini.sh
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        with:
-          summary_table: ${{ steps.prepare_table.outputs.summary_table }}
+          SUMMARY_TABLE: ${{ steps.prepare_table.outputs.summary_table }}
 
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
