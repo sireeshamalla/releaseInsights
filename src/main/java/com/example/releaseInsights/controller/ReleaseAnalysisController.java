@@ -32,6 +32,7 @@ public class ReleaseAnalysisController {
         logger.info("calling release analysis job");
         logger.info("added for testing");
         logger.info("added for testing");
+        logger.info("added for testing");
 
         //String summary = releaseAnalysisJob.analyzeLatestRelease();
         return ResponseEntity.ok(Map.of("success", true));    }

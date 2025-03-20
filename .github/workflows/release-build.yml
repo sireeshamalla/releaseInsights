@@ -33,6 +33,7 @@ jobs:
           printenv | grep '^summary_map_' | sed 's/^summary_map_//' | while IFS='=' read -r file summary; do
             echo "Processing file: $file with summary: $summary"  # Debugging line
             summary_table+="<tr><td>${file}</td><td>${summary}</td></tr>"
+            echo "Current summary_table: ${summary_table}"  # Debugging line
           done
           summary_table+="</table>"
           echo "Summary Table: ${summary_table}"  # Print the summary table
