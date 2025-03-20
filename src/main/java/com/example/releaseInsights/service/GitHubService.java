@@ -28,6 +28,8 @@ public class GitHubService {
         String latest = latestBranches.get(0);
         String previous = latestBranches.get(1);
         logger.info("Comparing branches: {} and {}", previous, latest);
+        logger.info("adding for testing workflow");
+
         return compareService.getBranchDiff(previous, latest);
     }
 }
