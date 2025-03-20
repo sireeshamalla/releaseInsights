@@ -39,6 +39,14 @@ jobs:
           echo "Summary Table: ${summary_table}"  # Print the summary table
           echo "::set-output name=summary_table::${summary_table}"
 
+      - name: Call Gemini AI
+        id: call_gemini
+        run: ./scripts/call_gemini.sh
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        with:
+          summary_table: ${{ steps.prepare_table.outputs.summary_table }}
+
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -50,4 +58,8 @@ jobs:
           to: sireesha.malla@gmail.com
           from: ${{ secrets.GMAIL_USERNAME }}
           content_type: text/html
-          html_body: ${{ steps.prepare_table.outputs.summary_table }}
+          html_body: |
+            <h2>Gemini Summary</h2>
+            <p>${{ steps.call_gemini.outputs.gemini_summary }}</p>
+            <h2>Summary Table</h2>
+            ${{ steps.prepare_table.outputs.summary_table }}

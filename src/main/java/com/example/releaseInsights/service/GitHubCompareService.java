@@ -39,6 +39,8 @@ public class GitHubCompareService {
             if (patch != null) {
                 String summary = googleAiService.summarizeCodeDiff(patch);
                 changesSummary.put(filename, summary);
+            }else {
+                changesSummary.put(filename, "No changes found");
             }
         }
         StringBuilder stringBuilder = new StringBuilder();

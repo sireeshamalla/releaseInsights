@@ -22,7 +22,7 @@ public class GitHubService {
         List<String> latestBranches = branchService.getLatestReleaseBranches();
 
         if (latestBranches.size() < 2) {
-            return "Not enough release branches found!";
+            return "Not enough release branches found !";
         }
 
         String latest = latestBranches.get(0);
