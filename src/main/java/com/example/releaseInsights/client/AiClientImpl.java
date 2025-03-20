@@ -25,6 +25,10 @@ public class AiClientImpl implements AiClient {
         //  Have the method return the content of the response.
         logger.info("Input received: {} System Prompt: {}", input, systemPrompt); // Format specifiers used for logging
         String response = client.prompt().system(systemPrompt).user(input).call().content();
+        if(response == null) {
+            logger.error("Response from AI is null");
+            return "Error: Response from AI is null";
+        }
         logger.info("Response from AI: {}", response); // Format specifier used for logging
         return response;
     }

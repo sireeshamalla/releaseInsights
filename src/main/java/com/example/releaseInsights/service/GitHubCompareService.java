@@ -38,6 +38,9 @@ public class GitHubCompareService {
 
             if (patch != null) {
                 String summary = googleAiService.summarizeCodeDiff(patch);
+                if(summary.equals("Error: Response from AI is null")){ // If AI service fails, return the patch
+                    summary = patch;
+                }
                 changesSummary.put(filename, summary);
             }else {
                 changesSummary.put(filename, "No changes found");

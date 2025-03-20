@@ -58,7 +58,7 @@ jobs:
           from: ${{ secrets.GMAIL_USERNAME }}
           content_type: text/html
           html_body: |
-            <h2>Gemini Summary</h2>
+            <h2>Release Summary</h2>
             <p>${{ steps.call_gemini.outputs.gemini_summary }}</p>
-            <h2>Summary Table</h2>
+            <h2>Release File Changes and Summaries</h2>
             ${{ steps.prepare_table.outputs.summary_table }}
