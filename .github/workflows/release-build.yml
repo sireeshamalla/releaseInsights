@@ -30,11 +30,11 @@ jobs:
         id: prepare_table
         run: |
           summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
-          printenv | grep '^summary_map_' | sed 's/^summary_map_//' | while IFS='=' read -r file summary; do
+          while IFS='=' read -r file summary; do
             echo "Processing file: $file with summary: $summary"  # Debugging line
             summary_table="${summary_table}<tr><td>${file}</td><td>${summary}</td></tr>"
             echo "Current summary_table: ${summary_table}"  # Debugging line
-          done
+          done < <(printenv | grep '^summary_map_' | sed 's/^summary_map_//')
           summary_table="${summary_table}</table>"
           echo "Summary Table: ${summary_table}"  # Print the summary table
           echo "::set-output name=summary_table::${summary_table}"
