@@ -105,7 +105,9 @@ done
 
 # Output the summary for GitHub Actions using Environment Files
 for file in "${!summary_map[@]}"; do
-  echo "summary_map_${file}|${summary_map[$file]}" >> $GITHUB_ENV
+  # Replace any newlines in the summary with a space to ensure a single-line value
+  sanitized_summary=$(echo "${summary_map[$file]}" | tr '\n' ' ')
+  echo "summary_map_${file}=${sanitized_summary}" >> $GITHUB_ENV
 done
 
 # Disable debug mode
