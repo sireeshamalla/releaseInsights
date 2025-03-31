@@ -41,4 +41,15 @@ public class GoogleAiService {
 
         return response;
     }
+    public String analyzeAndSummarize(String codeDiff) throws IOException {
+        logger.info("Analyzing and summarizing code diff");
+
+        // Simulate some analysis
+        String analysisResult = "Analysis result of the code diff";
+
+        // Summarize the code diff
+        String summary = summarizeCodeDiff(codeDiff);
+
+        return analysisResult + "\n" + summary;
+    }
 }
