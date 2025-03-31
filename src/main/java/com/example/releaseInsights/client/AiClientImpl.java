@@ -18,11 +18,7 @@ public class AiClientImpl implements AiClient {
     }
 
     public String callApi(String systemPrompt, String input) {
-        //  .prompt() creates a prompt to pass to the Model.class
-        //  .user() sets the "user" message. Pass the input String parameter.
-        //  .call() invokes the model.  It returns a CallResponse.
-        //  .content() is a simple means of extracting String content from the response.
-        //  Have the method return the content of the response.
+
         logger.info("Input received: {} System Prompt: {}", input, systemPrompt); // Format specifiers used for logging
         String response = client.prompt().system(systemPrompt).user(input).call().content();
         logger.info("Response from AI: {}", response); // Format specifier used for logging

@@ -18,21 +18,27 @@ public class GoogleAiService {
     public String summarizeCodeDiff(String codeDiff) throws IOException {
 
         String systemPrompt = String.format(
-                "You are an intelligent code analysis assistant. Your task is to generate a concise summary of the provided code difference (diff) for a file.\n" +
+                "You are a smart code analysis assistant. Your job is to create a brief summary of the given code difference (diff) for a file.\n" +
                         "\n" +
                         "Instructions:\n" +
-                        "1. Analyze the provided code diff and identify the key changes.\n" +
-                        "2. Summarize the changes in a clear and concise manner.\n" +
-                        "3. Focus on the most significant modifications, additions, and deletions.\n" +
-                        "4. Ensure the summary is easy to understand and provides a high-level overview of the changes.\n" +
+                        "1. Examine the provided code diff and identify the main changes.\n" +
+                        "2. Summarize the changes clearly and concisely.\n" +
+                        "3. Highlight the most important modifications, additions, and deletions.\n" +
+                        "4. Ensure the summary is easy to understand and gives a high-level overview of the changes.\n" +
                         "\n" +
                         "Output Format:\n" +
                         "- [Summary of the key changes in the code diff]\n" +
                         "\n" +
-                        "Note: Always prioritize clarity and conciseness."
+                        "Note: Always prioritize clarity and brevity."
         );
         logger.info("systemprompt: " + systemPrompt);
 
-        return aiClient.callApi(systemPrompt, codeDiff);
+        String response = aiClient.callApi(systemPrompt, codeDiff);
+
+        if (response == null) {
+            return codeDiff;
+        }
+
+        return response;
     }
 }
