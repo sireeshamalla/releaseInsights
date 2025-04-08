@@ -1,17 +1,11 @@
 #!/bin/bash
 echo "Fetching Jira stories for the given Fix Version..."
-echo "BOARD_ID: $BOARD_ID"
-echo "FIX_VERSION: $FIX_VERSION"
-echo "JIRA_DOMAIN: $JIRA_DOMAIN"
-echo "JIRA_EMAIL: $JIRA_EMAIL"
-echo "JIRA_API_TOKEN: $JIRA_API_TOKEN"
-echo "URL: https://$JIRA_DOMAIN/rest/agile/1.0/board/$BOARD_ID/issue?jql=issuetype=Story%20AND%20fixVersion=%22$FIX_VERSION%22&fields=description"
 # Fetch Jira Stories for the given Fix Version
 response=$(curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
-  "https://$JIRA_DOMAIN/rest/agile/1.0/board/$BOARD_ID/issue?jql=issuetype=Story%20AND%20fixVersion=%22$FIX_VERSION%22&fields=summary")
+  "https://$JIRA_DOMAIN/rest/agile/1.0/board/$BOARD_ID/issue?jql=issuetype=Story%20AND%20fixVersion=%22$FIX_VERSION%22&fields=description")
 echo "Response: $response"  # Debugging line
 # Extract story keys and summaries from the response
-story_data=$(echo "$response" | jq -r '.issues[] | "\(.key)=\(.fields.summary)"')
+story_data=$(echo "$response" | jq -r '.issues[] | "\(.key)=\(.fields.description)"')
 
 # Initialize a variable to store the formatted data
 story_list=""
