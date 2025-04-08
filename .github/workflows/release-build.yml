@@ -25,6 +25,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        outputs:
+          html_table: ${{ steps.fetch_stories.outputs.html_table }}
+
       - name: Fetch Jira Stories for Latest Branch
         id: fetch_stories
         run: ./scripts/fetch_jira_stories.sh
@@ -39,7 +42,7 @@ jobs:
         run: ./scripts/call_gemini_stories_summary.sh
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          STORY_TABLE: ${html_table}
+          STORY_TABLE: ${{ steps.fetch_stories.outputs.html_table }}
 
       - name: Prepare HTML Table
         id: prepare_table

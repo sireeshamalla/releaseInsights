@@ -22,6 +22,6 @@ html_table="${html_table}</table>"
 
 # Export the HTML table to the GitHub environment
 echo "html_table=$html_table" >> $GITHUB_ENV
-
+echo "::set-output name=html_table::$html_table"
 # Print the HTML table for debugging
 echo "HTML Table: $html_table"
