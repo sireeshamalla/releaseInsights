@@ -30,6 +30,7 @@ public class GitHubBranchService {
     }
 
     public List<String> getLatestReleaseBranches() {
+
         String url = String.format(GITHUB_API_URL, gitHubConfig.getRepoOwner(), gitHubConfig.getRepoName());
         logger.info("Requesting URL: {}", url);
 
