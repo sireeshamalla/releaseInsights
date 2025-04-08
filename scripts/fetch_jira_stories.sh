@@ -1,5 +1,7 @@
 #!/bin/bash
-
+echo "Fetching Jira stories for the given Fix Version..."
+echo "BOARD_ID: $BOARD_ID"
+echo "FIX_VERSION: $FIX_VERSION"
 # Fetch Jira Stories for the given Fix Version
 response=$(curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
   "https://$JIRA_DOMAIN/rest/agile/1.0/board/$BOARD_ID/issue?jql=issuetype=Story%20AND%20fixVersion=%22$FIX_VERSION%22&fields=summary")
