@@ -3,7 +3,7 @@
 # Fetch Jira Stories for the given Fix Version
 response=$(curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
   "https://$JIRA_DOMAIN/rest/agile/1.0/board/$BOARD_ID/issue?jql=issuetype=Story%20AND%20fixVersion=%22$FIX_VERSION%22&fields=summary")
-
+echo "Response: $response"  # Debugging line
 # Extract story keys and summaries from the response
 story_data=$(echo "$response" | jq -r '.issues[] | "\(.key)=\(.fields.summary)"')
 
