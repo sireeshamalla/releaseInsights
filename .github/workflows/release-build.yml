@@ -34,7 +34,7 @@ jobs:
           BOARD_ID: 34
           FIX_VERSION: release-25.69
       - name: Call Gemini AI
-        id: call_gemini
+        id: call_gemini_for_stories
         run: ./scripts/call_gemini_stories_summary.sh
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
