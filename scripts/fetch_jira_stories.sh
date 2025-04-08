@@ -15,7 +15,7 @@ html_table="<table border='1'><tr><th>Story Key</th><th>Description</th></tr>"
 # Iterate through each story and add rows to the table
 while IFS= read -r story; do
   story_key=$(echo "$story" | cut -d'=' -f1)
-  story_description=$(echo "$story" | cut -d'=' -f2- | tr -d '\n' | sed 's/  Scenarios:/<br>Scenarios:/g')
+  story_description=$(echo "$story" | cut -d'=' -f2- | sed ':a;N;$!ba;s/\n/ /g' | sed 's/  Scenarios:/<br>Scenarios:/g')
   html_table="${html_table}<tr><td>${story_key}</td><td>${story_description}</td></tr>"
 done <<< "$story_data"
 

@@ -47,7 +47,7 @@ jobs:
         id: prepare_table
         run: |
           summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
-          while IFS='=' read -r fisle summary; do
+          while IFS='=' read -r file summary; do
             echo "Processing file: $file with summary: $summary"  # Debugging line
             summary_table="${summary_table}<tr><td>${file}</td><td>${summary}</td></tr>"
             echo "Current summary_table: ${summary_table}"  # Debugging line
