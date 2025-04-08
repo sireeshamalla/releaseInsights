@@ -33,6 +33,13 @@ jobs:
           JIRA_DOMAIN: sirimalla102.atlassian.net
           BOARD_ID: 34
           FIX_VERSION: release-25.69
+      - name: Call Gemini AI
+        id: call_gemini
+        run: ./scripts/call_gemini_stories_summary.sh
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          STORY_TABLE: ${{ steps.fetch_stories.outputs.html_table }}
+
       - name: Prepare HTML Table
         id: prepare_table
         run: |
@@ -65,7 +72,11 @@ jobs:
           from: ${{ secrets.GMAIL_USERNAME }}
           content_type: text/html
           html_body: |
-            <h2>Gemini Summary</h2>
+            <h2>Gemini Jira Story Summary</h2>
+            <p>${{ steps.call_gemini.outputs.gemini_stories_summary }}</p>
+            <h2>Jira Story Details</h2>
+            ${{ steps.fetch_stories.outputs.html_table }}
+            <h2>Gemini code changes Summary</h2>
             <p>${{ steps.call_gemini.outputs.gemini_summary }}</p>
-            <h2>Summary Table</h2>
+            <h2>Code Changes Details</h2>
             ${{ steps.prepare_table.outputs.summary_table }}
