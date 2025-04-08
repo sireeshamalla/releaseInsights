@@ -26,6 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       - name: Fetch Jira Stories for Latest Branch
+        id: fetch_stories
         run: ./scripts/fetch_jira_stories.sh
         env:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
@@ -73,7 +74,7 @@ jobs:
           content_type: text/html
           html_body: |
             <h2>Gemini Jira Story Summary</h2>
-            <p>${{ steps.call_gemini.outputs.gemini_stories_summary }}</p>
+            <p>${{ steps.call_gemini_for_stories.outputs.gemini_stories_summary }}</p>
             <h2>Jira Story Details</h2>
             ${{ steps.fetch_stories.outputs.html_table }}
             <h2>Gemini code changes Summary</h2>
