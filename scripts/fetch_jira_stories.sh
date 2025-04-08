@@ -6,7 +6,7 @@ response=$(curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
 echo "Response: $response"  # Debugging line
 # Extract story keys and summaries from the response
 story_data=$(echo "$response" | jq -r '.issues[] | "\(.key)=\(.fields.description)"')
-
+echo "Story Data: $story_data"  # Debugging line
 # Initialize the HTML table
 html_table="<table border='1'><tr><th>Story Key</th><th>Description</th></tr>"
 
