@@ -25,8 +25,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        outputs:
-          html_table: ${{ steps.fetch_stories.outputs.html_table }}
 
       - name: Fetch Jira Stories for Latest Branch
         id: fetch_stories
@@ -37,6 +35,9 @@ jobs:
           JIRA_DOMAIN: sirimalla102.atlassian.net
           BOARD_ID: 34
           FIX_VERSION: release-25.69
+        outputs:
+          html_table: ${{ steps.fetch_stories.outputs.html_table }}
+
       - name: Call Gemini AI
         id: call_gemini_for_stories
         run: ./scripts/call_gemini_stories_summary.sh
