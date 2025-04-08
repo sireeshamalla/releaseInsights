@@ -25,12 +25,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-
+      - name: Fetch Jira Stories for Latest Branch
+        run: ./scripts/fetch_jira_stories.sh
+        env:
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_DOMAIN: siri.malla102.atlassian.net
+          BOARD_ID: 34
+          FIX_VERSION: ${{ env.latest_branch }}
       - name: Prepare HTML Table
         id: prepare_table
         run: |
           summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
-          while IFS='=' read -r file summary; do
+          while IFS='=' read -r fisle summary; do
             echo "Processing file: $file with summary: $summary"  # Debugging line
             summary_table="${summary_table}<tr><td>${file}</td><td>${summary}</td></tr>"
             echo "Current summary_table: ${summary_table}"  # Debugging line

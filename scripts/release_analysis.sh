@@ -102,7 +102,7 @@ for file in $changed_files; do
     summary_map[$file]=$text
   fi
 done
-
+echo "latest_branch=$latest_release" >> $GITHUB_ENV
 # Output the summary for GitHub Actions using Environment Files
 for file in "${!summary_map[@]}"; do
   # Replace any newlines in the summary with a space to ensure a single-line value
