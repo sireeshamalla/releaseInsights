@@ -39,7 +39,7 @@ jobs:
         run: ./scripts/call_gemini_stories_summary.sh
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          STORY_TABLE: ${{ steps.fetch_stories.outputs.html_table }}
+          STORY_TABLE: ${html_table}
 
       - name: Prepare HTML Table
         id: prepare_table
