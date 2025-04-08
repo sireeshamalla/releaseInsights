@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set execute permissions
-        run: chmod +x ./scripts/release_analysis.sh ./scripts/call_gemini.sh
+        run: chmod +x ./scripts/release_analysis.sh .scripts/fetch_jira_stories.sh ./scripts/call_gemini.sh
 
       - name: Run Release Analysis
         run: ./scripts/release_analysis.sh
@@ -32,7 +32,7 @@ jobs:
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           JIRA_DOMAIN: siri.malla102.atlassian.net
           BOARD_ID: 34
-          FIX_VERSION: ${{ env.latest_branch }}
+          FIX_VERSION: release-25.69
       - name: Prepare HTML Table
         id: prepare_table
         run: |
