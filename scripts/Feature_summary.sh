@@ -7,6 +7,7 @@ response=$(curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
 "https://$JIRA_DOMAIN/rest/agile/1.0/board/$BOARD_ID/issue?jql=issuetype=Story%20AND%20fixVersion=%22$FIX_VERSION%22%20AND%20'Feature%20Link'%20is%20not%20EMPTY&fields=customfield_10091,status")
 echo "Response from Jira API: $response"
 
+# Check if the response contains any issues
 # Parse the response to extract stories
 echo "Parsing stories..."
 stories=$(echo "$response" | jq -r '.issues[] | "\(.fields.customfield_10091)=\(.fields.status.name)"')
