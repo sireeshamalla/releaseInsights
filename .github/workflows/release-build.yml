@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set execute permissions
-        run: chmod +x ./scripts/release_analysis.sh ./scripts/fetch_jira_stories.sh ./scripts/call_gemini_stories_summary.sh ./scripts/call_gemini.sh
+        run: chmod +x ./scripts/release_analysis.sh ./scripts/Feature_summary.sh ./scripts/call_gemini_stories_summary.sh ./scripts/call_gemini.sh
 
       - name: Run Release Analysis
         run: ./scripts/release_analysis.sh
@@ -28,20 +28,15 @@ jobs:
 
       - name: Fetch Jira Stories for Latest Branch
         id: fetch_stories
-        run: ./scripts/fetch_jira_stories.sh
+        run: ./scripts/Feature_summary.sh
         env:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           JIRA_DOMAIN: sirimalla102.atlassian.net
           BOARD_ID: 34
           FIX_VERSION: release-25.69
-
-      - name: Call Gemini AI
-        id: call_gemini_for_stories
-        run: ./scripts/call_gemini_stories_summary.sh
-        env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          STORY_TABLE: ${{ steps.fetch_stories.outputs.html_table }}
+
 
       - name: Prepare HTML Table
         id: prepare_table
@@ -75,10 +70,8 @@ jobs:
           from: ${{ secrets.GMAIL_USERNAME }}
           content_type: text/html
           html_body: |
-            <h2>Gemini Jira Story Summary</h2>
-            <p>${{ steps.call_gemini_for_stories.outputs.gemini_stories_summary }}</p>
-            <h2>Jira Story Details</h2>
-            ${{ steps.fetch_stories.outputs.html_table }}
+            <h2>Feature Summary</h2>
+            ${{ env.html_table }}
             <h2>Gemini code changes Summary</h2>
             <p>${{ steps.call_gemini.outputs.gemini_summary }}</p>
             <h2>Code Changes Details</h2>
