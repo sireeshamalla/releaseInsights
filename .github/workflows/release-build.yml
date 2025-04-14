@@ -63,9 +63,6 @@ jobs:
           echo "Final summary_table: $summary_table"
           echo "::set-output name=summary_table::$summary_table"
 
-      - name: Debug Summary table Variables
-        run: echo ${{ steps.prepare_table.outputs.summary_table }}
-
       - name: Call Gemini AI
         id: call_gemini
         run: ./scripts/call_gemini.sh
