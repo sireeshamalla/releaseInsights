@@ -97,7 +97,10 @@ for feature_url in "${!feature_map[@]}"; do
 done
 html_table="${html_table}</table>"
 
-# Export the HTML table to the GitHub environment
+# Escape special characters in the HTML table
+escaped_html_table=$(echo "$html_table" | sed 's/[\*]/\\*/g' | sed 's/[\_]/\\_/g')
+
+# Export the escaped HTML table to the GitHub environment
 echo "Exporting HTML table to GitHub environment..."
-echo "html_table=$html_table" >> $GITHUB_ENV
+echo "html_table=$escaped_html_table" >> $GITHUB_ENV
 echo "Script execution completed."

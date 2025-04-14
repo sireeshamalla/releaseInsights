@@ -45,7 +45,7 @@ echo "Latest branches: $latest_branches"
 
 # Get the latest release branch
 latest_release=$(echo "$latest_branches" | head -n 1)
-previous_release=$(echo "$latest_branches" | tail -n 1)
+previous_release=$(echo "$latest_branches" | tail -n 2)
 echo "Latest release: $latest_release"
 echo "Previous release: $previous_release"
 
