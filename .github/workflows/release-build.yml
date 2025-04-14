@@ -64,7 +64,7 @@ jobs:
           echo "::set-output name=summary_table::$summary_table"
 
       - name: Debug Summary table Variables
-        run: printenv | ${{ steps.prepare_table.outputs.summary_table }}
+        run: echo ${{ steps.prepare_table.outputs.summary_table }}
 
       - name: Call Gemini AI
         id: call_gemini
