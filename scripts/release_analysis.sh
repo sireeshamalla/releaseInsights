@@ -82,8 +82,8 @@ for file in $changed_files; do
 
   if [ -n "$patch" ]; then
     # Create a detailed prompt message
-    prompt_message="You are an intelligent code analysis assistant. Your task is to generate a concise list of the key code changes from the provided code difference (diff) for a file.\n\nInstructions:\n1. Analyze the provided code diff and identify the key code changes.\n2. Provide a simple and clear list of the changes without any explanations or reasons.\n3. Ensure the output is concise and focuses only on the changes made in the code.\n\nOutput Format:- [List of key code changes]\n\n$patch\"}"
-    # Properly escape the prompt_message for JSON    # Properly escape the prompt_message for JSON    # Properly escape the prompt_message for JSON
+    prompt_message="You are an intelligent code analysis assistant. Your task is to generate a concise summary of the key code changes from the provided code difference (diff) for a file.\n\nInstructions:\n1. Analyze the provided code diff and identify the key code changes.\n2. Categorize the changes into two sections: Business Changes and Technical Changes.\n3. Provide a simple and clear list of changes under each section without any explanations or reasons.\n\nOutput Format:\nBusiness Changes:\n- [List of business changes]\n\nTechnical Changes:\n- [List of technical changes]\n\n$patch\"}"
+    # Properly escape the prompt_message for JSON    # Properly escape the prompt_message for JSON    # Properly escape the prompt_message for JSON    # Properly escape the prompt_message for JSON
     escaped_prompt_message=$(echo "$prompt_message" | jq -sRr @json)
 
     # Call Gemini AI to get the summary of the changes
