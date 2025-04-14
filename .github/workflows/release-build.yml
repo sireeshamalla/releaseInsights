@@ -51,6 +51,7 @@ jobs:
             summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
           done < <(printenv | grep '^summary_map_' | sed 's/^summary_map_//')
           summary_table="${summary_table}</table>"
+          echo "Final summary_table: $summary_table" # Log the summary_table
           echo "::set-output name=summary_table::${summary_table}"
 
       - name: Call Gemini AI
