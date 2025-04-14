@@ -19,17 +19,22 @@ public class GitHubService {
     }
 
     public String analyzeLatestReleaseChanges() throws IOException {
-        List<String> latestBranches = branchService.getLatestReleaseBranches();
+        try {
+            List<String> latestBranches = branchService.getLatestReleaseBranches();
 
-        if (latestBranches.size() < 2) {
-            return "Not enough release branches found !";
+            if (latestBranches.size() < 2) {
+                return "Not enough release branches found !";
+            }
+
+            String latest = latestBranches.get(0);
+            String previous = latestBranches.get(1);
+            logger.info("Comparing branches: {} and {}", previous, latest);
+
+            return compareService.getBranchDiff(previous, latest);
+        } catch (IOException e) {
+            logger.error("Error fetching release branches or comparing them", e);
+            return "An error occurred while analyzing release changes.";
         }
-
-        String latest = latestBranches.get(0);
-        String previous = latestBranches.get(1);
-        logger.info("Comparing branches: {} and {}", previous, latest);
-
-        return compareService.getBranchDiff(previous, latest);
     }
 
     static void Fibonacci(int N)
