@@ -45,7 +45,7 @@ jobs:
         id: prepare_table
         run: |
           summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
-          printenv | grep '^summary_map_' | while IFS='=' read -r file summary; do
+          while IFS='=' read -r file summary; do
             # Remove the "summary_map_" prefix from the file name
             file=$(echo "$file" | sed 's/^summary_map_//')
             echo "Processing file: $file"
@@ -58,11 +58,10 @@ jobs:
             # Add the formatted summary to the table and enclose it in <pre> tags
             summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
             echo "Current summary_table: $summary_table"
-          done
-          summary_table="$summary_table</table>"
+          done < <(printenv | grep '^summary_map_')
+          summary_table="${summary_table}</table>"
           echo "Final summary_table: $summary_table"
           echo "::set-output name=summary_table::$summary_table"
-
       - name: Call Gemini AI
         id: call_gemini
         run: ./scripts/call_gemini.sh
