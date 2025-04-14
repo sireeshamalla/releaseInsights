@@ -53,7 +53,9 @@ for feature_url in "${!feature_map[@]}"; do
 
   # Summarize feature description using Gemini AI
   echo "Summarizing feature description using Gemini AI..."
-  prompt_message="You are an intelligent assistant. Summarize the following Jira feature acceptance criteria into a simple, crisp, and clear format suitable for leadership. Focus on the key outcomes and high-level objectives, avoiding technical details or jargon.\n\nAcceptance Criteria:\n\n${feature_description}"  escaped_prompt_message=$(echo "$prompt_message" | jq -sRr @json)
+  prompt_message="You are an intelligent assistant. Summarize the following Jira feature acceptance criteria into a simple, crisp, and clear format suitable for leadership. Ensure the summary does not include any special characters like *, _, ~, or other Markdown formatting that is incompatible with environment variables.\n\nAcceptance Criteria:\n\n${feature_description}"
+  escaped_prompt_message=$(echo "$prompt_message" | jq -sRr @json)
+
   summary_response=$(curl -s -X POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY} \
     -H 'Content-Type: application/json' \
     -d @<(echo '{
