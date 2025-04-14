@@ -2,15 +2,16 @@
 
 # Enable debug mode
 set -x
+
 # Check if GEMINI_API_KEY is set
 if [ -z "$GEMINI_API_KEY" ]; then
   echo "Error: GEMINI_API_KEY is not set."
   exit 1
 fi
+
 # GitHub API token
 REPO_OWNER="sireeshamalla"
 REPO_NAME="releaseInsights"
-
 
 echo "Fetching all branches..."
 # Get all branches with pagination
@@ -39,13 +40,26 @@ done
 
 echo "Branches fetched: ${branches[@]}"
 
-# Sort branches and get the latest 2 releases
-latest_branches=$(echo "${branches[@]}" | tr ' ' '\n' | grep 'release-' | sort -r | head -n 2)
-echo "Latest branches: $latest_branches"
+# Fetch branch names along with their creation dates
+branch_dates=()
+for branch in "${branches[@]}"; do
+  commit_sha=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+    "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/branches/$branch" | jq -r '.commit.sha')
 
-# Get the latest release branch
+  commit_date=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+    "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/commits/$commit_sha" | jq -r '.commit.committer.date')
+
+  branch_dates+=("$branch|$commit_date")
+done
+
+# Sort branches by creation date in descending order
+sorted_branches=$(printf "%s\n" "${branch_dates[@]}" | sort -t '|' -k2 -r)
+
+# Extract the latest and previous release branches
+latest_branches=$(echo "$sorted_branches" | grep 'release-' | cut -d'|' -f1 | head -n 2)
 latest_release=$(echo "$latest_branches" | head -n 1)
-previous_release=$(echo "$latest_branches" | tail -n 2)
+previous_release=$(echo "$latest_branches" | tail -n 1)
+
 echo "Latest release: $latest_release"
 echo "Previous release: $previous_release"
 
@@ -68,7 +82,7 @@ for file in $changed_files; do
   if [ -n "$patch" ]; then
     # Create a detailed prompt message
     prompt_message="You are an intelligent code analysis assistant. Your task is to generate a concise and functional summary of the provided code difference (diff) for a file.\n\nInstructions:\n1. Analyze the provided code diff and identify the key changes.\n2. Summarize the changes in a clear and concise manner, focusing on their functional impact and relevance to stakeholders.\n3. Highlight how the changes affect the system's behavior, user experience, or business logic.\n4. Ensure the summary is easy to understand and provides a high-level overview of the changes.\n\nOutput Format:- [Functional summary of the key changes in the code diff]\n\nNote: Always prioritize clarity, conciseness, and functional relevance.\n\n$patch\"}"
-    # Properly escape the prompt_message for JSON    # Properly escape the prompt_message for JSON
+    # Properly escape the prompt_message for JSON
     escaped_prompt_message=$(echo "$prompt_message" | jq -sRr @json)
 
     # Call Gemini AI to get the summary of the changes
@@ -98,10 +112,11 @@ for file in $changed_files; do
     echo "Summary: $summary"
     text=$(echo "$summary" | jq -r '.candidates[0].content.parts[0].text')
 
-  # Save summary in the map
+    # Save summary in the map
     summary_map[$file]=$text
   fi
 done
+
 echo "latest_branch=$latest_release" >> $GITHUB_ENV
 # Output the summary for GitHub Actions using Environment Files
 for file in "${!summary_map[@]}"; do
