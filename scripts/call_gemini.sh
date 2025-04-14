@@ -45,7 +45,7 @@ echo "Escaped Final Prompt Message: $escaped_final_prompt_message"  # Debugging 
 
 final_text=$(echo "$final_summary" | jq -r '.candidates[0].content.parts[0].text')
 echo "Final Text: $final_text"  # Debugging line
-echo "::set-output name=gemini_summary::${final_text}"
-
+# Export gemini_summary as an environment variable
+echo "gemini_summary=$final_text" >> $GITHUB_ENV
 # Disable debug mode
 set +x

@@ -87,6 +87,6 @@ jobs:
             <h2>Feature Summary</h2>
             ${{ env.html_table }}
             <h2>Code changes Summary</h2>
-            <p>${{ steps.call_gemini.outputs.gemini_summary }}</p>
+            <p>${{ env.gemini_summary }}</p>
             <h2>Code Changes Details</h2>
-            ${{ steps.prepare_table.outputs.summary_table }}
+            ${{ env.summary_table }}
