@@ -50,16 +50,15 @@ jobs:
             file=$(echo "$file" | sed 's/^summary_map_//')
             # Replace escaped newlines (\n) with actual newlines
             formatted_summary=$(echo "$summary" | sed 's/\\n/\n/g')
-            # Remove triple backticks (```)
-            formatted_summary=$(echo "$formatted_summary" | sed 's/^```//g' | sed 's/```$//g')
-            # Remove backticks
-            formatted_summary=$(echo "$formatted_summary" | sed 's/`//g')
-            # Add the formatted summary to the table and close the <pre> tag
+            # Remove triple backticks (```) and single backticks (`) from the summary
+            formatted_summary=$(echo "$formatted_summary" | sed 's/^```//g' | sed 's/```$//g' | sed 's/`//g')
+            # Add the formatted summary to the table and enclose it in <pre> tags
             summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
           done
           summary_table="${summary_table}</table>"
           echo "Final summary_table: $summary_table" # Log the summary_table
           echo "::set-output name=summary_table::${summary_table}"
+
       - name: Call Gemini AI
         id: call_gemini
         run: ./scripts/call_gemini.sh
