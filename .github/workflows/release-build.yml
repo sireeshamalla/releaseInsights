@@ -18,40 +18,70 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set execute permissions
-        run: chmod +x ./scripts/release_analysis.sh ./scripts/call_gemini.sh
+        run: chmod +x ./scripts/release_analysis.sh ./scripts/Feature_summary.sh ./scripts/call_gemini_stories_summary.sh ./scripts/call_gemini.sh
 
       - name: Run Release Analysis
         run: ./scripts/release_analysis.sh
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
       - name: Fetch Jira Stories for Latest Branch
-        run: ./scripts/fetch_jira_stories.sh
+        id: fetch_stories
+        run: ./scripts/Feature_summary.sh
         env:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          JIRA_DOMAIN: siri.malla102.atlassian.net
+          JIRA_DOMAIN: sirimalla102.atlassian.net
           BOARD_ID: 34
-          FIX_VERSION: ${{ env.latest_branch }}
+          FIX_VERSION: release-25.69
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+
+      - name: Debug Summary Map Variables
+        run: printenv | grep '^summary_map_'
+
       - name: Prepare HTML Table
         id: prepare_table
         run: |
           summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
-          while IFS='=' read -r fisle summary; do
-            echo "Processing file: $file with summary: $summary"  # Debugging line
-            summary_table="${summary_table}<tr><td>${file}</td><td>${summary}</td></tr>"
-            echo "Current summary_table: ${summary_table}"  # Debugging line
-          done < <(printenv | grep '^summary_map_' | sed 's/^summary_map_//')
+          while IFS='=' read -r file summary; do
+            # Remove the "summary_map_" prefix from the file name
+            file=$(echo "$file" | sed 's/^summary_map_//')
+            echo "Processing file: $file"
+            # Decode multi-line summaries and handle escaped newlines
+            formatted_summary=$(echo -e "$summary" | sed 's/\\n/\n/g')
+            echo "Formatted summary newlines: $formatted_summary"
+            # Remove triple backticks (```) and single backticks (`) from the summary
+            formatted_summary=$(echo "$formatted_summary" | sed 's/^```//g' | sed 's/```$//g' | sed 's/`//g')
+            echo "Formatted summary without backticks: $formatted_summary"
+            # Add the formatted summary to the table and enclose it in <pre> tags
+            summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
+            echo "Current summary_table: $summary_table"
+          done < <(printenv | grep '^summary_map_')
           summary_table="${summary_table}</table>"
-          echo "Summary Table: ${summary_table}"  # Print the summary table
-          echo "::set-output name=summary_table::${summary_table}"
+          echo "Final summary_table: $summary_table"
+           # Escape newlines and special characters before exporting
+          escaped_summary_table=$(echo "$summary_table" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
+          echo "summary_table=$escaped_summary_table" >> $GITHUB_ENV
 
       - name: Call Gemini AI
         id: call_gemini
         run: ./scripts/call_gemini.sh
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          SUMMARY_TABLE: ${{ steps.prepare_table.outputs.summary_table }}
+          SUMMARY_TABLE: ${{ env.summary_table }}
+
+      - name: Format Gemini Summary
+        run: |
+            formatted_gemini_summary=$(echo "${{ env.gemini_summary }}" | sed 's/\\n/<br>/g')
+            echo "formatted_gemini_summary=$formatted_gemini_summary" >> $GITHUB_ENV
+      
+
+      - name: Format Summary Table
+        run: |
+          formatted_summary_table=$(echo "${{ env.summary_table }}" | sed 's/\\n/<br>/g')
+          echo "formatted_summary_table=$formatted_summary_table" >> $GITHUB_ENV
 
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
@@ -60,12 +90,14 @@ jobs:
           server_port: 465
           username: ${{ secrets.GMAIL_USERNAME }}
           password: ${{ secrets.GMAIL_PASSWORD }}
-          subject: Release Summary
+          subject: Release Summary for ${{env.latest_branch}}
           to: sireesha.malla@gmail.com
           from: ${{ secrets.GMAIL_USERNAME }}
           content_type: text/html
           html_body: |
-            <h2>Gemini Summary</h2>
-            <p>${{ steps.call_gemini.outputs.gemini_summary }}</p>
-            <h2>Summary Table</h2>
-            ${{ steps.prepare_table.outputs.summary_table }}
+            <h2>Feature Summary</h2>
+            ${{ env.html_table }}
+            <h2>Code changes Summary</h2>
+            <p>${{ env.formatted_gemini_summary }}</p>
+            <h2>Code Changes Details</h2>
+            ${{ env.formatted_summary_table }}

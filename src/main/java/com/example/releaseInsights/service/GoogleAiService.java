@@ -16,7 +16,9 @@ public class GoogleAiService {
     private AiClient aiClient;
 
     public String summarizeCodeDiff(String codeDiff) throws IOException {
-
+        if (aiClient == null) {
+            throw new IllegalStateException("AiClient is not initialized");
+        }
         String systemPrompt = String.format(
                 "You are a smart code analysis assistant. Your job is to create a brief summary of the given code difference (diff) for a file.\n" +
                         "\n" +
@@ -33,13 +35,16 @@ public class GoogleAiService {
         );
         logger.info("systemprompt: " + systemPrompt);
 
-        String response = aiClient.callApi(systemPrompt, codeDiff);
-
-        if (response == null) {
-            return codeDiff;
+        try {
+            String response = aiClient.callApi(systemPrompt, codeDiff);
+            if (response == null) {
+                return codeDiff;
+            }
+            return response;
+        } catch (Exception e) {
+            logger.error("Error while calling AI API", e);
+            throw new RuntimeException("Failed to summarize code diff", e);
         }
-
-        return response;
     }
     public String analyzeAndSummarize(String codeDiff) throws IOException {
         logger.info("Analyzing and summarizing code diff");
