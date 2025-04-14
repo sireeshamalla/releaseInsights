@@ -61,8 +61,9 @@ jobs:
           done < <(printenv | grep '^summary_map_')
           summary_table="${summary_table}</table>"
           echo "Final summary_table: $summary_table"
-          # Export summary_table using Environment Files
-          echo "summary_table=$summary_table" >> $GITHUB_ENV
+           # Escape newlines and special characters before exporting
+          escaped_summary_table=$(echo "$summary_table" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
+          echo "summary_table=$escaped_summary_table" >> $GITHUB_ENV
 
       - name: Call Gemini AI
         id: call_gemini
