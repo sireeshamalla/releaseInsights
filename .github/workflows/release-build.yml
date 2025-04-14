@@ -45,8 +45,9 @@ jobs:
           while IFS='=' read -r file summary; do
             # Replace escaped \n with actual newlines
             formatted_summary=$(echo "$summary" | sed 's/\\n/\n/g')
-            # Escape backticks to prevent HTML rendering issues
+            # Remove backticks
             formatted_summary=$(echo "$formatted_summary" | sed 's/`//g')
+            # Add the formatted summary to the table and close the <pre> tag
             summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
           done < <(printenv | grep '^summary_map_' | sed 's/^summary_map_//')
           summary_table="${summary_table}</table>"
