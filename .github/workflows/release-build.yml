@@ -37,6 +37,8 @@ jobs:
           FIX_VERSION: release-25.69
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Debug Summary Map Variables
+        run: printenv | grep '^summary_map_'
 
       - name: Prepare HTML Table
         id: prepare_table
