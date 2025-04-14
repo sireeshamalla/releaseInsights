@@ -52,13 +52,12 @@ jobs:
           summary_table="${summary_table}</table>"
           echo "::set-output name=summary_table::${summary_table}"
 
-      - name: Call Gemini Stories Summary
+      - name: Call Gemini AI
         id: call_gemini
-        run: |
-              summary=$(./scripts/call_gemini_stories_summary.sh)
-              echo "gemini_summary<<EOF" >> $GITHUB_ENV
-              echo "$summary" >> $GITHUB_ENV
-              echo "EOF" >> $GITHUB_ENV
+        run: ./scripts/call_gemini.sh
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUMMARY_TABLE: ${{ steps.prepare_table.outputs.summary_table }}
 
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
