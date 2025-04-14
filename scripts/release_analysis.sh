@@ -122,7 +122,7 @@ echo "latest_branch=$latest_release" >> $GITHUB_ENV
 # Output the summary for GitHub Actions using Environment Files
 for file in "${!summary_map[@]}"; do
   # Replace any newlines in the summary with a space to ensure a single-line value
-  sanitized_summary=$(echo "${summary_map[$file]}" | tr '\n' ' ')
+  sanitized_summary=$(echo "${summary_map[$file]}")
   echo "summary_map_${file}=${sanitized_summary}" >> $GITHUB_ENV
 done
 
