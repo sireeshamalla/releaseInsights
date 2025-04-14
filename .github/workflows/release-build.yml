@@ -72,6 +72,17 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUMMARY_TABLE: ${{ env.summary_table }}
 
+      - name: Format Gemini Summary
+        run: |
+            formatted_gemini_summary=$(echo "${{ env.gemini_summary }}" | sed 's/\\n/<br>/g')
+            echo "formatted_gemini_summary=$formatted_gemini_summary" >> $GITHUB_ENV
+      
+
+      - name: Format Summary Table
+        run: |
+          formatted_summary_table=$(echo "${{ env.summary_table }}" | sed 's/\\n/<br>/g')
+          echo "formatted_summary_table=$formatted_summary_table" >> $GITHUB_ENV
+
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -87,6 +98,6 @@ jobs:
             <h2>Feature Summary</h2>
             ${{ env.html_table }}
             <h2>Code changes Summary</h2>
-            <p>${{ env.gemini_summary | replace('\n', '<br>') }}</p>
-            <h2>Code Changes Details</h2>            <h2>Code Changes Details</h2>
-            ${{ env.summary_table | fromJson | replace('\n', '<br>') }}
+            <p>${{ env.formatted_gemini_summary }}</p>
+            <h2>Code Changes Details</h2>
+            ${{ env.formatted_summary_table }}
