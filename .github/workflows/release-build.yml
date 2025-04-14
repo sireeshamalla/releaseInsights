@@ -45,12 +45,21 @@ jobs:
           while IFS='=' read -r file summary; do
             # Replace escaped \n with actual newlines
             formatted_summary=$(echo "$summary" | sed 's/\\n/\n/g')
-            # Escape backticks to prevent shell interpretation
+            # Escape backticks to prevent HTML rendering issues
             formatted_summary=$(echo "$formatted_summary" | sed 's/`/&#96;/g')
             summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
           done < <(printenv | grep '^summary_map_' | sed 's/^summary_map_//')
           summary_table="${summary_table}</table>"
           echo "::set-output name=summary_table::${summary_table}"
+
+      - name: Call Gemini Stories Summary
+        id: call_gemini
+        run: |
+              summary=$(./scripts/call_gemini_stories_summary.sh)
+              echo "gemini_summary<<EOF" >> $GITHUB_ENV
+              echo "$summary" >> $GITHUB_ENV
+              echo "EOF" >> $GITHUB_ENV
+
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -65,7 +74,7 @@ jobs:
           html_body: |
             <h2>Feature Summary</h2>
             ${{ env.html_table }}
-            <h2>Gemini code changes Summary</h2>
+            <h2>Code changes Summary</h2>
             <p>${{ steps.call_gemini.outputs.gemini_summary }}</p>
             <h2>Code Changes Details</h2>
             ${{ steps.prepare_table.outputs.summary_table }}
