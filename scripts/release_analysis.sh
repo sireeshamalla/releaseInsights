@@ -58,7 +58,8 @@ sorted_branches=$(printf "%s\n" "${branch_dates[@]}" | sort -t '|' -k2 -r)
 # Extract the latest and previous release branches
 latest_branches=$(echo "$sorted_branches" | grep 'release-' | cut -d'|' -f1 | head -n 2)
 latest_release=$(echo "$latest_branches" | head -n 1)
-previous_release=$(echo "$latest_branches" | tail -n 1)
+previous_release="release-25.98"
+#$(echo "$latest_branches" | tail -n 1)
 
 echo "Latest release: $latest_release"
 echo "Previous release: $previous_release"
