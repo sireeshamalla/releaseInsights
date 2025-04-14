@@ -45,22 +45,21 @@ jobs:
         id: prepare_table
         run: |
           summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
-          printenv | grep '^summary_map_' | awk -F= '
-            BEGIN { OFS="=" }
-            {
-              file = $1
-              summary = $2
-              for (i = 3; i <= NF; i++) {
-                summary = summary "=" $i
-              }
-              gsub(/^summary_map_/, "", file)
-              gsub(/\\n/, "\n", summary)
-              gsub(/^```|```$/, "", summary)
-              gsub(/`/, "", summary)
-              printf("<tr><td>%s</td><td><pre>%s</pre></td></tr>\n", file, summary)
-            }
-          ' >> temp_table.html
-          summary_table="${summary_table}$(cat temp_table.html)</table>"
+          printenv | grep '^summary_map_' | while IFS='=' read -r file summary; do
+            # Remove the "summary_map_" prefix from the file name
+            file=$(echo "$file" | sed 's/^summary_map_//')
+            echo "Processing file: $file"
+            # Decode multi-line summaries and handle escaped newlines
+            formatted_summary=$(echo -e "$summary" | sed 's/\\n/\n/g')
+            echo "Formatted summary newlines: $formatted_summary"
+            # Remove triple backticks (```) and single backticks (`) from the summary
+            formatted_summary=$(echo "$formatted_summary" | sed 's/^```//g' | sed 's/```$//g' | sed 's/`//g')
+            echo "Formatted summary without backticks: $formatted_summary"
+            # Add the formatted summary to the table and enclose it in <pre> tags
+            summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
+            echo "Current summary_table: $summary_table"
+          done
+          summary_table="${summary_table}</table>"
           echo "Final summary_table: $summary_table"
           echo "::set-output name=summary_table::${summary_table}"
 
