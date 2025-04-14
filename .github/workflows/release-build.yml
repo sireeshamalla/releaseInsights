@@ -87,6 +87,6 @@ jobs:
             <h2>Feature Summary</h2>
             ${{ env.html_table }}
             <h2>Code changes Summary</h2>
-            <p>${{ env.gemini_summary }}</p>
-            <h2>Code Changes Details</h2>
-            ${{ env.summary_table }}
+            <p>${{ env.gemini_summary | replace('\n', '<br>') }}</p>
+            <h2>Code Changes Details</h2>            <h2>Code Changes Details</h2>
+            ${{ env.summary_table | fromJson | replace('\n', '<br>') }}
