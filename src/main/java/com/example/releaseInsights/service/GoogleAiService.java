@@ -14,7 +14,9 @@ public class GoogleAiService {
 
     @Autowired
     private AiClient aiClient;
-
+/*
+added for demo
+ */
     public String summarizeCodeDiff(String codeDiff) throws IOException {
         if (aiClient == null) {
             throw new IllegalStateException("AiClient is not initialized");
