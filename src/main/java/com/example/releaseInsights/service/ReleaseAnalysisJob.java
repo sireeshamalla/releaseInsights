@@ -15,6 +15,9 @@ public class ReleaseAnalysisJob {
     private final GitHubService gitHubService;
     private final GoogleAiService googleAiService;
 
+    /*
+    Added for demo purpose
+     */
     public ReleaseAnalysisJob(GitHubService gitHubService, GoogleAiService googleAiService) {
         this.gitHubService = gitHubService;
         this.googleAiService = googleAiService;
