@@ -1,1 +1,3 @@
 rootProject.name = 'releaseInsights'
+// File: settings.gradle
+include 'bdd-tests'
