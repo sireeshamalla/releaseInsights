@@ -16,6 +16,7 @@ echo "Parsed stories: $stories"
 declare -A feature_map
 declare -A feature_status_count
 declare -A feature_descriptions
+declare -A feature_testcaseids_map
 
 # Group stories by feature and count statuses
 echo "Grouping stories by feature..."
@@ -32,7 +33,41 @@ while IFS= read -r story; do
   if [[ "$status" == "Done" ]]; then
     feature_status_count["$feature_url"]=$((feature_status_count["$feature_url"] + 1))
   fi
+
+  # Fetch story details to get labels and description
+    story_key=$(basename "$feature_url")
+    story_response=$(curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
+      "https://$JIRA_DOMAIN/rest/api/3/issue/$story_key?fields=labels,description")
+    labels=$(echo "$story_response" | jq -r '.fields.labels[]?')
+    description=$(echo "$story_response" | jq -r '.fields.description | @text')
+
+    # If story has bdd-testcases label, extract TestCaseIds
+    if echo "$labels" | grep -q "bdd-testcases"; then
+      ids=$(echo "$description" | grep -o 'TestCaseId:[0-9A-Za-z_-]*' | cut -d: -f2)
+      for id in $ids; do
+        feature_testcaseids_map["$feature_url"]="${feature_testcaseids_map["$feature_url"]} $id"
+      done
+    fi
 done <<< "$stories"
+for feature in "${!feature_testcaseids_map[@]}"; do
+  echo "Feature: $feature"
+  echo "TestCaseIds:${feature_testcaseids_map[$feature]}"
+done
+
+# Convert associative array to JSON
+feature_testcaseids_json="{"
+for feature in "${!feature_testcaseids_map[@]}"; do
+  ids="${feature_testcaseids_map[$feature]}"
+  # Escape double quotes and backslashes
+  safe_feature=$(echo "$feature" | sed 's/"/\\"/g')
+  safe_ids=$(echo "$ids" | sed 's/"/\\"/g')
+  feature_testcaseids_json="${feature_testcaseids_json}\"${safe_feature}\":\"${safe_ids}\","
+done
+# Remove trailing comma and close JSON
+feature_testcaseids_json="${feature_testcaseids_json%,}}"
+
+# Export to GitHub Actions environment
+echo "feature_testcaseids_map=$feature_testcaseids_json" >> $GITHUB_ENV
 
 # Fetch and summarize each feature's description
 echo "Fetching and summarizing feature descriptions..."
