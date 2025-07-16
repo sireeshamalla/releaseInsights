@@ -18,12 +18,22 @@ declare -A feature_status_count
 declare -A feature_descriptions
 declare -A feature_testcaseids_map
 
+stories_with_bdd=$(echo "$response" | jq -c '.issues[] | select(.fields.labels[]? == "bdd-testcases")')
+declare -A feature_testcaseids_map
+echo "$stories_with_bdd" | while read -r story_json; do
+  feature_url=$(echo "$story_json" | jq -r '.fields.customfield_10091')
+  description=$(echo "$story_json" | jq -r '.fields.description')
+  testcaseids=$(echo "$description" | grep -o '@TestCaseId=[^ ]*' | tr '\n' ',' | sed 's/,$//')
+  if [[ -n "$testcaseids" ]]; then
+    feature_testcaseids_map["$feature_url"]="${feature_testcaseids_map["$feature_url"]},$testcaseids"
+  fi
+done
+
 # Group stories by feature and count statuses
 echo "Grouping stories by feature..."
 while IFS= read -r story; do
   feature_url=$(echo "$story" | cut -d'=' -f1)
   status=$(echo "$story" | cut -d'=' -f2)
-
   echo "Processing story with Feature Link: $feature_url and Status: $status"
 
   # Increment total story count for the feature
@@ -34,40 +44,7 @@ while IFS= read -r story; do
     feature_status_count["$feature_url"]=$((feature_status_count["$feature_url"] + 1))
   fi
 
-  # Fetch story details to get labels and description
-    story_key=$(basename "$feature_url")
-    story_response=$(curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
-      "https://$JIRA_DOMAIN/rest/api/3/issue/$story_key?fields=labels,description")
-    labels=$(echo "$story_response" | jq -r '.fields.labels[]?')
-    description=$(echo "$story_response" | jq -r '.fields.description | @text')
-
-    # If story has bdd-testcases label, extract TestCaseIds
-    if echo "$labels" | grep -q "bdd-testcases"; then
-      ids=$(echo "$description" | grep -o 'TestCaseId:[0-9A-Za-z_-]*' | cut -d: -f2)
-      for id in $ids; do
-        feature_testcaseids_map["$feature_url"]="${feature_testcaseids_map["$feature_url"]} $id"
-      done
-    fi
-done <<< "$stories"
-for feature in "${!feature_testcaseids_map[@]}"; do
-  echo "Feature: $feature"
-  echo "TestCaseIds:${feature_testcaseids_map[$feature]}"
 done
-
-# Convert associative array to JSON
-feature_testcaseids_json="{"
-for feature in "${!feature_testcaseids_map[@]}"; do
-  ids="${feature_testcaseids_map[$feature]}"
-  # Escape double quotes and backslashes
-  safe_feature=$(echo "$feature" | sed 's/"/\\"/g')
-  safe_ids=$(echo "$ids" | sed 's/"/\\"/g')
-  feature_testcaseids_json="${feature_testcaseids_json}\"${safe_feature}\":\"${safe_ids}\","
-done
-# Remove trailing comma and close JSON
-feature_testcaseids_json="${feature_testcaseids_json%,}}"
-
-# Export to GitHub Actions environment
-echo "feature_testcaseids_map=$feature_testcaseids_json" >> $GITHUB_ENV
 
 # Fetch and summarize each feature's description
 echo "Fetching and summarizing feature descriptions..."
@@ -130,8 +107,9 @@ for feature_url in "${!feature_map[@]}"; do
   completion_percentage=$((100 * done_stories / total_stories))
   feature_summary=${feature_descriptions["$feature_url"]}
   echo "Feature: $feature_url, Completion: $completion_percentage%, Summary: $feature_summary"
-  html_table="${html_table}<tr><td>${feature_url}</td><td>${feature_summary}</td><td>${completion_percentage}%</td></tr>"
-done
+  testcaseids=$(echo "${feature_testcaseids_map["$feature_url"]}" | sed 's/^,//')
+    html_table="${html_table}<tr><td>${feature_url}</td><td>${feature_summary}</td><td>${completion_percentage}%</td><td>${testcaseids}</td></tr>"
+  done
 html_table="${html_table}</table>"
 
 # Escape special characters in the HTML table
