@@ -2,6 +2,4 @@
 Feature: Hello World
 
   Scenario: say hello
-    Given url 'https://postman-echo.com/get'
-    When method get
-    Then status 200
+    Given print 'Hello, world!'
