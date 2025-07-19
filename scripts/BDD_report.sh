@@ -49,12 +49,16 @@ mapfile -t rows < <(echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td>
     passed_ids=""
     failed_ids=""
     not_ran_ids=""
+
+    # Collect all passed and failed TestCaseIds globally
+    all_passed_ids=$(IFS=,; echo "${karate_passed[@]}")
+    all_failed_ids=$(IFS=,; echo "${karate_failed[@]}")
+
     for id in "${ids[@]}"; do
-      clean_id="${id#@}" # Remove leading @ if present
-      echo "[DEBUG] Checking TestCaseId: $clean_id"
-      if [[ ",${karate_passed["$feature"]}" == *",$clean_id,"* ]]; then
+      clean_id="${id#@}"  # Remove leading @
+      if [[ ",$all_passed_ids," == *",$clean_id,"* ]]; then
         passed_ids+="$id,"
-      elif [[ ",${karate_failed["$feature"]}" == *",$clean_id,"* ]]; then
+      elif [[ ",$all_failed_ids," == *",$clean_id,"* ]]; then
         failed_ids+="$id,"
       else
         not_ran_ids+="$id,"
