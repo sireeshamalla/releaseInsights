@@ -111,7 +111,9 @@ for feature_url in "${!feature_map[@]}"; do
   feature_summary=${feature_descriptions["$feature_url"]}
   echo "Feature: $feature_url, Completion: $completion_percentage%, Summary: $feature_summary"
   testcaseids=$(echo "${feature_testcaseids_map["$feature_url"]}" | sed 's/^,//')
-    html_table="${html_table}<tr><td>${feature_url}</td><td>${feature_summary}</td><td>${completion_percentage}%</td><td>${testcaseids}</td></tr>"
+  # Remove leading @ from each TestCaseId
+  clean_testcaseids=$(echo "$testcaseids" | sed 's/@//g')
+  html_table="${html_table}<tr><td>${feature_url}</td><td>${feature_summary}</td><td>${completion_percentage}%</td><td>${clean_testcaseids}</td></tr>"
   done
 html_table="${html_table}</table>"
 

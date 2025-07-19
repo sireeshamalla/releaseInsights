@@ -103,7 +103,7 @@ jobs:
             ${{ env.feature_html_table }}
             <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
-            <h2>Code Changes Details</h2>
-            ${{ env.formatted_summary_table }}
             <h2>Karate Testcase Summary</h2>
             ${{ env.karate_feature_testcase_status_table }}
+            <h2>Code Changes Details</h2>
+            ${{ env.formatted_summary_table }}
