@@ -63,7 +63,7 @@ echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td><td>.*?</td><td>.*?<
   passed_ids="${passed_ids%,}"
   failed_ids="${failed_ids%,}"
   not_ran_ids="${not_ran_ids%,}"
-  echo "[DEBUG] After trimming commas, Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
+  echo "[DEBUG] After trimming commas, feature:$feature, Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
   summary_table="${summary_table}<tr><td>${feature}</td><td>${all_ids}</td><td>${passed_ids}</td><td>${failed_ids}</td><td>${not_ran_ids}</td></tr>"
 done
 summary_table="${summary_table}</table>"
