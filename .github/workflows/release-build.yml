@@ -84,7 +84,7 @@ jobs:
           echo "formatted_summary_table=$formatted_summary_table" >> $GITHUB_ENV
 
       - name: Karate Testcase Summary Table
-        run: ./scripts/karate_testcase_summary.sh
+        run: ./scripts/BDD_report.sh
 
 
       - name: Send Email
