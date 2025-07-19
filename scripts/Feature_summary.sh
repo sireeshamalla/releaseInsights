@@ -121,5 +121,5 @@ escaped_html_table=$(echo "$html_table" | sed 's/[\*]/\\*/g' | sed 's/[\_]/\\_/g
 echo escaped_html_table
 # Export the escaped HTML table to the GitHub environment
 echo "Exporting HTML table to GitHub environment..."
-echo "html_table=$escaped_html_table" >> $GITHUB_ENV
+echo "feature_html_table=$escaped_html_table" >> $GITHUB_ENV
 echo "Script execution completed."

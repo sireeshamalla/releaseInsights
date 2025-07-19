@@ -83,6 +83,10 @@ jobs:
           formatted_summary_table=$(echo "${{ env.summary_table }}" | sed 's/\\n/<br>/g')
           echo "formatted_summary_table=$formatted_summary_table" >> $GITHUB_ENV
 
+      - name: Karate Testcase Summary Table
+        run: ./scripts/karate_testcase_summary.sh
+
+
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -96,8 +100,10 @@ jobs:
           content_type: text/html
           html_body: |
             <h2>Feature Summary</h2>
-            ${{ env.html_table }}
+            ${{ env.feature_html_table }}
             <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
             <h2>Code Changes Details</h2>
             ${{ env.formatted_summary_table }}
+            <h2>Karate Testcase Summary</h2>
+            ${{ env.karate_feature_testcase_status_table }}
