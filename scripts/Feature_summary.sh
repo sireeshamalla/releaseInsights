@@ -24,8 +24,11 @@ echo "$stories_with_bdd" | while read -r story_json; do
   feature_url=$(echo "$story_json" | jq -r '.fields.customfield_10091')
   description=$(echo "$story_json" | jq -r '.fields.description')
   testcaseids=$(echo "$description" | grep -o '@TestCaseId=[^ ]*' | tr '\n' ',' | sed 's/,$//')
+  echo "Debug: Feature URL: $feature_url"
+  echo "Debug: Extracted TestCaseIds: $testcaseids"
   if [[ -n "$testcaseids" ]]; then
     feature_testcaseids_map["$feature_url"]="${feature_testcaseids_map["$feature_url"]},$testcaseids"
+    echo "Debug: Updated feature_testcaseids_map[$feature_url]=${feature_testcaseids_map["$feature_url"]}"
   fi
 done
 
