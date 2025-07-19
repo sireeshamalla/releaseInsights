@@ -42,7 +42,7 @@ echo "[DEBUG] Generating summary table..."
 echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td><td>.*?</td><td>.*?</td><td>.*?</td></tr>' | while read -r row; do
   echo "[DEBUG] Processing row: $row"
   feature=$(echo "$row" | sed -n 's|<tr><td>\(.*\)</td><td>.*</td><td>.*</td><td>.*</td></tr>|\1|p')
-  all_ids=$(echo "$row" | sed -n 's|<tr><td>.*</td><td>\(.*\)</td><td>.*</td><td>.*</td></tr>|\1|p')
+  all_ids=$(echo "$row" | sed -n 's|<tr><td>.*</td><td>.*</td><td>.*</td><td>\(.*\)</td></tr>|\1|p')
   echo "[DEBUG] Feature: $feature, All TestCaseIds: $all_ids"
   IFS=',' read -ra ids <<< "$all_ids"
   passed_ids=""
