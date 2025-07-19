@@ -49,10 +49,11 @@ echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td><td>.*?</td><td>.*?<
   failed_ids=""
   not_ran_ids=""
   for id in "${ids[@]}"; do
-    echo "[DEBUG] Checking TestCaseId: $id"
-    if [[ ",${karate_passed["$feature"]}" == *",$id,"* ]]; then
+    clean_id="${id#@}" # Remove leading @ if present
+    echo "[DEBUG] Checking TestCaseId: $clean_id"
+    if [[ ",${karate_passed["$feature"]}" == *",$clean_id,"* ]]; then
       passed_ids+="$id,"
-    elif [[ ",${karate_failed["$feature"]}" == *",$id,"* ]]; then
+    elif [[ ",${karate_failed["$feature"]}" == *",$clean_id,"* ]]; then
       failed_ids+="$id,"
     else
       not_ran_ids+="$id,"
