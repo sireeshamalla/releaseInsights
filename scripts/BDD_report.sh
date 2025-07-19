@@ -39,34 +39,36 @@ echo "[DEBUG] karate_failed: ${karate_failed[@]}"
 summary_table="<table border='1'><tr><th>Feature</th><th>All TestCaseIds</th><th>Passed</th><th>Failed</th><th>Not Ran</th></tr>"
 echo "[DEBUG] Generating summary table..."
 
-echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td><td>.*?</td><td>.*?</td><td>.*?</td></tr>' | while read -r row; do
-  echo "[DEBUG] Processing row: $row"
-  feature=$(echo "$row" | sed -n 's|<tr><td>\(.*\)</td><td>.*</td><td>.*</td><td>.*</td></tr>|\1|p')
-  all_ids=$(echo "$row" | sed -n 's|<tr><td>.*</td><td>.*</td><td>.*</td><td>\(.*\)</td></tr>|\1|p')
-  echo "[DEBUG] Feature: $feature, All TestCaseIds: $all_ids"
-  IFS=',' read -ra ids <<< "$all_ids"
-  passed_ids=""
-  failed_ids=""
-  not_ran_ids=""
-  for id in "${ids[@]}"; do
-    clean_id="${id#@}" # Remove leading @ if present
-    echo "[DEBUG] Checking TestCaseId: $clean_id"
-    if [[ ",${karate_passed["$feature"]}" == *",$clean_id,"* ]]; then
-      passed_ids+="$id,"
-    elif [[ ",${karate_failed["$feature"]}" == *",$clean_id,"* ]]; then
-      failed_ids+="$id,"
-    else
-      not_ran_ids+="$id,"
-    fi
+mapfile -t rows < <(echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td><td>.*?</td><td>.*?</td><td>.*?</td></tr>' )
+  for row in "${rows[@]}"; do
+    echo "[DEBUG] Processing row: $row"
+    feature=$(echo "$row" | sed -n 's|<tr><td>\(.*\)</td><td>.*</td><td>.*</td><td>.*</td></tr>|\1|p')
+    all_ids=$(echo "$row" | sed -n 's|<tr><td>.*</td><td>.*</td><td>.*</td><td>\(.*\)</td></tr>|\1|p')
+    echo "[DEBUG] Feature: $feature, All TestCaseIds: $all_ids"
+    IFS=',' read -ra ids <<< "$all_ids"
+    passed_ids=""
+    failed_ids=""
+    not_ran_ids=""
+    for id in "${ids[@]}"; do
+      clean_id="${id#@}" # Remove leading @ if present
+      echo "[DEBUG] Checking TestCaseId: $clean_id"
+      if [[ ",${karate_passed["$feature"]}" == *",$clean_id,"* ]]; then
+        passed_ids+="$id,"
+      elif [[ ",${karate_failed["$feature"]}" == *",$clean_id,"* ]]; then
+        failed_ids+="$id,"
+      else
+        not_ran_ids+="$id,"
+      fi
+    done
+    echo "[DEBUG] Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
+    passed_ids="${passed_ids%,}"
+    failed_ids="${failed_ids%,}"
+    not_ran_ids="${not_ran_ids%,}"
+    echo "[DEBUG] After trimming commas, feature:$feature, Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
+    summary_table="${summary_table}<tr><td>${feature}</td><td>${all_ids}</td><td>${passed_ids}</td><td>${failed_ids}</td><td>${not_ran_ids}</td></tr>"
+    echo "[DEBUG] inside loop Final summary_table: $summary_table"
   done
-  echo "[DEBUG] Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
-  passed_ids="${passed_ids%,}"
-  failed_ids="${failed_ids%,}"
-  not_ran_ids="${not_ran_ids%,}"
-  echo "[DEBUG] After trimming commas, feature:$feature, Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
-  summary_table="${summary_table}<tr><td>${feature}</td><td>${all_ids}</td><td>${passed_ids}</td><td>${failed_ids}</td><td>${not_ran_ids}</td></tr>"
-  echo "[DEBUG] inside loop Final summary_table: $summary_table"
-done
+
 summary_table="${summary_table}</table>"
 
 echo "[DEBUG] Final summary_table: $summary_table"
