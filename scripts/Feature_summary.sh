@@ -20,7 +20,7 @@ declare -A feature_testcaseids_map
 
 stories_with_bdd=$(echo "$response" | jq -c '.issues[] | select(.fields.labels[]? == "bdd-testcases")')
 declare -A feature_testcaseids_map
-echo "$stories_with_bdd" | while read -r story_json; do
+while read -r story_json; do
   feature_url=$(echo "$story_json" | jq -r '.fields.customfield_10091')
   description=$(echo "$story_json" | jq -r '.fields.description')
   testcaseids=$(echo "$description" | grep -o '@TestCaseId:[^ ]*' | tr '\n' ',' | sed 's/,$//')
@@ -30,7 +30,7 @@ echo "$stories_with_bdd" | while read -r story_json; do
     feature_testcaseids_map["$feature_url"]="${feature_testcaseids_map["$feature_url"]},$testcaseids"
     echo "Debug: Updated feature_testcaseids_map[$feature_url]=${feature_testcaseids_map["$feature_url"]}"
   fi
-done
+done < <(echo "$stories_with_bdd")
 
 # Group stories by feature and count statuses
 echo "Grouping stories by feature..."
