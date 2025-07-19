@@ -1,0 +1,40 @@
+{
+  "featureCount": 2,
+  "scenariosPassed": 3,
+  "scenariosFailed": 1,
+  "scenariosSkipped": 0,
+  "features": [
+    {
+      "name": "Login Feature",
+      "path": "classpath:features/login.feature",
+      "scenarios": [
+        {
+          "name": "Valid login",
+          "testCaseId": "TC-101",
+          "status": "passed"
+        },
+        {
+          "name": "Invalid login",
+          "testCaseId": "TC-102",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "name": "User Profile Feature",
+      "path": "classpath:features/profile.feature",
+      "scenarios": [
+        {
+          "name": "View profile",
+          "testCaseId": "TestCaseId:123-343",
+          "status": "passed"
+        },
+        {
+          "name": "Edit profile",
+          "testCaseId": "TestCaseId:123-345",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

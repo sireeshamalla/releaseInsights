@@ -34,7 +34,7 @@ done
 
 # Group stories by feature and count statuses
 echo "Grouping stories by feature..."
-echo "$stories" | while IFS= read -r story; do
+while IFS= read -r story; do
   feature_url=$(echo "$story" | cut -d'=' -f1)
   status=$(echo "$story" | cut -d'=' -f2)
   echo "Processing story with Feature Link: $feature_url and Status: $status"
@@ -47,7 +47,7 @@ echo "$stories" | while IFS= read -r story; do
     feature_status_count["$feature_url"]=$((feature_status_count["$feature_url"] + 1))
   fi
 
-done
+done < <(echo "$stories")
 
 # Fetch and summarize each feature's description
 echo "Fetching and summarizing feature descriptions..."
