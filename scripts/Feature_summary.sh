@@ -34,7 +34,7 @@ done
 
 # Group stories by feature and count statuses
 echo "Grouping stories by feature..."
-while IFS= read -r story; do
+echo "$stories" | while IFS= read -r story; do
   feature_url=$(echo "$story" | cut -d'=' -f1)
   status=$(echo "$story" | cut -d'=' -f2)
   echo "Processing story with Feature Link: $feature_url and Status: $status"
