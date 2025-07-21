@@ -108,7 +108,7 @@ style_block="<style>
 </style>"
 # Display the results
 echo "Generating HTML table..."
-html_table="<table><tr><th>Feature</th><th>Summary</th><th>Completion Percentage</th><th>TestCase Ids</th></tr>"
+html_table="<table><tr class='table-header'><th>Feature</th><th>Summary</th><th>Completion Percentage</th><th>TestCase Ids</th></tr>"
 for feature_url in "${!feature_map[@]}"; do
   total_stories=${feature_map["$feature_url"]}
   done_stories=${feature_status_count["$feature_url"]}
