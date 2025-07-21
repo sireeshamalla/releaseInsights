@@ -100,10 +100,15 @@ for feature_url in "${!feature_map[@]}"; do
   # Store the feature description and summary
   feature_descriptions["$feature_url"]="$feature_summary"
 done
-
+# Add this style block before your table HTML
+style_block="<style>
+  .table-header { background-color: #1a73e8; color: #fff; font-weight: bold; text-align: left; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { border: 1px solid #ddd; padding: 8px; }
+</style>"
 # Display the results
 echo "Generating HTML table..."
-html_table="<table border='1'><tr><th>Feature</th><th>Summary</th><th>Completion Percentage</th></tr>"
+html_table="<table><tr><th>Feature</th><th>Summary</th><th>Completion Percentage</th><th>TestCase Ids</th></tr>"
 for feature_url in "${!feature_map[@]}"; do
   total_stories=${feature_map["$feature_url"]}
   done_stories=${feature_status_count["$feature_url"]}
@@ -119,6 +124,7 @@ html_table="${html_table}</table>"
 
 # Escape special characters in the HTML table
 escaped_html_table=$(echo "$html_table" | sed 's/[\*]/\\*/g' | sed 's/[\_]/\\_/g')
+escaped_html_table="${style_block}${html_table}"
 
 echo escaped_html_table
 # Export the escaped HTML table to the GitHub environment

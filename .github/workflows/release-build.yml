@@ -99,30 +99,11 @@ jobs:
           from: ${{ secrets.GMAIL_USERNAME }}
           content_type: text/html
           html_body: |
-            <style>
-              .table-header { background-color: #1a73e8; color: #fff; font-weight: bold; text-align: left; }
-              table { border-collapse: collapse; width: 100%; }
-              td, th { border: 1px solid #ddd; padding: 8px; }
-            </style>
             <h2>Feature Summary</h2>
-            <p>Overview of Jira features and their implementation status.</p>
-            <table border='1'>
-            <tr class="table-header">
-            <th>Feature</th><th>Summary</th><th>Completion Percentage</th>
-            </tr>
             ${{ env.feature_html_table }}
-            </table>
-            <h2>Code Changes Summary</h2>
-            <p>AI-generated summary of code changes in this release.</p>
+            <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
             <h2>Karate Testcase Summary</h2>
-            <p>Status of BDD test cases for all features.</p>
-            <table border='1'>
-            <tr class="table-header">
-            <th>Feature</th><th>All TestCaseIds</th><th>Passed</th><th>Failed</th><th>Not Ran</th>
-            </tr>
             ${{ env.karate_feature_testcase_status_table }}
-            </table>
             <h2>Code Changes Details</h2>
-            <p>Detailed summary of code changes per file.</p>
             ${{ env.formatted_summary_table }}
