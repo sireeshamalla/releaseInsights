@@ -3,7 +3,7 @@
 
 echo "[DEBUG] Starting script execution..."
 
-FEATURE_TESTCASEIDS_ENV="${feature_html_table}" # Or use $html_table if exported
+FEATURE_TESTCASEIDS_ENV=$(echo "$feature_html_table" | base64 --decode) # Or use $html_table if exported
 echo "[DEBUG] FEATURE_TESTCASEIDS_ENV: $FEATURE_TESTCASEIDS_ENV"
 
 KARATE_REPORT_PATH="target/karate-reports/karate-summary.json"

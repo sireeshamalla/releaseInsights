@@ -86,6 +86,12 @@ jobs:
       - name: Karate Testcase Summary Table
         run: ./scripts/BDD_report.sh
 
+      - name: Decode Feature HTML Table
+        run: |
+          FEATURE_HTML_TABLE=$(echo "${{ env.feature_html_table }}" | base64 --decode)
+          echo "FEATURE_HTML_TABLE<<EOF" >> $GITHUB_ENV
+          echo "$FEATURE_HTML_TABLE" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
