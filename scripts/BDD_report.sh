@@ -86,5 +86,5 @@ echo "[DEBUG] Final summary_table: $summary_table"
 
 # Export for email
 echo "[DEBUG] Escaped summary table for export."
-echo "karate_feature_testcase_status_table=$escaped_summary_table" >> $GITHUB_ENV
+echo "karate_feature_testcase_status_table=$summary_table" >> $GITHUB_ENV
 echo "[DEBUG] Script execution completed."
