@@ -37,13 +37,7 @@ echo "[DEBUG] karate_failed: ${karate_failed[@]}"
 
 # Parse feature test case IDs from env variable (HTML table)
 summary_table="<table style='border-collapse:collapse; width:100%;'>"
-summary_table="${summary_table}<tr>
-  <th style='border:1px solid #000; background-color:#e3f2fd;'>Feature</th>
-  <th style='border:1px solid #000; background-color:#e3f2fd;'>All TestCaseIds</th>
-  <th style='border:1px solid #000; background-color:#e3f2fd;'>Passed</th>
-  <th style='border:1px solid #000; background-color:#e3f2fd;'>Failed</th>
-  <th style='border:1px solid #000; background-color:#e3f2fd;'>Not Ran</th>
-</tr>"
+summary_table="${summary_table}<tr><th style='border:1px solid #000; background-color:#e3f2fd;'>Feature</th><th style='border:1px solid #000; background-color:#e3f2fd;'>All TestCaseIds</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Passed</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Failed</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Not Ran</th></tr>"
 echo "[DEBUG] Generating summary table..."
 
 mapfile -t rows < <(echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td><td>.*?</td><td>.*?</td><td>.*?</td></tr>' )
