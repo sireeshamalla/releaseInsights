@@ -56,7 +56,7 @@ jobs:
             formatted_summary=$(echo "$formatted_summary" | sed 's/^```//g' | sed 's/```$//g' | sed 's/`//g')
             echo "Formatted summary without backticks: $formatted_summary"
             # Add the formatted summary to the table and enclose it in <pre> tags
-            summary_table="${summary_table}<tr><td>${file}</td><td><pre>${formatted_summary}</pre></td></tr>"
+            summary_table="${summary_table}<tr><td style='border:1px solid #000;'>${file}</td><td style='border:1px solid #000;'><pre>${formatted_summary}</pre></td></tr>"
             echo "Current summary_table: $summary_table"
           done < <(printenv | grep '^summary_map_')
           summary_table="${summary_table}</table>"
