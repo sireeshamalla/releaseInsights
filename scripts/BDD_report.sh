@@ -43,8 +43,8 @@ echo "[DEBUG] Generating summary table..."
 mapfile -t rows < <(echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr style=.border:1px solid #000;.*?><td.*?>.*?</td><td.*?>.*?</td><td.*?>.*?</td><td.*?>.*?</td></tr>')
 for row in "${rows[@]}"; do
     echo "[DEBUG] Processing row: $row"
-    feature=$(echo "$row" | sed -n 's|<tr><td>\(.*\)</td><td>.*</td><td>.*</td><td>.*</td></tr>|\1|p')
-    all_ids=$(echo "$row" | sed -n 's|<tr><td>.*</td><td>.*</td><td>.*</td><td>\(.*\)</td></tr>|\1|p')
+    feature=$(echo "$row" | sed -n 's|<tr style='\''border:1px solid #000;'\''><td style='\''border:1px solid #000;'\''>\(.*\)</td><td.*</td><td.*</td><td.*</td></tr>|\1|p')
+    all_ids=$(echo "$row" | sed -n 's|<tr style='\''border:1px solid #000;'\''><td.*</td><td.*</td><td.*</td><td style='\''border:1px solid #000;'\''>\(.*\)</td></tr>|\1|p')
     echo "[DEBUG] Feature: $feature, All TestCaseIds: $all_ids"
     IFS=',' read -ra ids <<< "$all_ids"
     passed_ids=""
