@@ -36,7 +36,14 @@ echo "[DEBUG] karate_passed: ${karate_passed[@]}"
 echo "[DEBUG] karate_failed: ${karate_failed[@]}"
 
 # Parse feature test case IDs from env variable (HTML table)
-summary_table="<table border='1'><tr><th>Feature</th><th>All TestCaseIds</th><th>Passed</th><th>Failed</th><th>Not Ran</th></tr>"
+summary_table="<table style='border-collapse:collapse; width:100%;'>"
+summary_table="${summary_table}<tr>
+  <th style='border:1px solid #000; background-color:#e3f2fd;'>Feature</th>
+  <th style='border:1px solid #000; background-color:#e3f2fd;'>All TestCaseIds</th>
+  <th style='border:1px solid #000; background-color:#e3f2fd;'>Passed</th>
+  <th style='border:1px solid #000; background-color:#e3f2fd;'>Failed</th>
+  <th style='border:1px solid #000; background-color:#e3f2fd;'>Not Ran</th>
+</tr>"
 echo "[DEBUG] Generating summary table..."
 
 mapfile -t rows < <(echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td><td>.*?</td><td>.*?</td><td>.*?</td></tr>' )
@@ -69,7 +76,13 @@ mapfile -t rows < <(echo "$FEATURE_TESTCASEIDS_ENV" | grep -oP '<tr><td>.*?</td>
     failed_ids="${failed_ids%,}"
     not_ran_ids="${not_ran_ids%,}"
     echo "[DEBUG] After trimming commas, feature:$feature, Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
-    summary_table="${summary_table}<tr><td>${feature}</td><td>${all_ids}</td><td>${passed_ids}</td><td>${failed_ids}</td><td>${not_ran_ids}</td></tr>"
+    summary_table="${summary_table}<tr style='border:1px solid #000;'>
+      <td style='border:1px solid #000;'>${feature}</td>
+      <td style='border:1px solid #000;'>${all_ids}</td>
+      <td style='border:1px solid #000;'>${passed_ids}</td>
+      <td style='border:1px solid #000;'>${failed_ids}</td>
+      <td style='border:1px solid #000;'>${not_ran_ids}</td>
+    </tr>"
     echo "[DEBUG] inside loop Final summary_table: $summary_table"
   done
 
