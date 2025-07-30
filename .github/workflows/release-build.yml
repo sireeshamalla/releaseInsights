@@ -106,7 +106,7 @@ jobs:
           content_type: text/html
           html_body: |
             <h2>Feature Summary</h2>
-            ${{ env.feature_html_table }}
+            ${{ env.$FEATURE_HTML_TABLE }}
             <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
             <h2>Karate Testcase Summary</h2>
