@@ -106,7 +106,11 @@ jobs:
           content_type: text/html
           html_body: |
             <h2>Feature Summary</h2>
-            ${{ env.FEATURE_HTML_TABLE }}
+            <div style="overflow-x:auto;">
+              <table style="border-collapse:collapse; width:100%;">
+                ${{ env.FEATURE_HTML_TABLE }}
+              </table>
+            </div>
             <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
             <h2>Karate Testcase Summary</h2>
