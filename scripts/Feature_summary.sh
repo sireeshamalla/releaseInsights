@@ -108,7 +108,8 @@ style_block="<style>
 </style>"
 # Display the results
 echo "Generating HTML table..."
-html_table="<table><tr class='table-header'><th>Feature</th><th>Summary</th><th>Completion Percentage</th><th>TestCase Ids</th></tr>"
+html_table="<table style='border-collapse:collapse; width:100%;'>"
+html_table="${html_table}<tr><th style='border:1px solid #000;'>Feature</th><th style='border:1px solid #000;'>Summary</th><th style='border:1px solid #000;'>Completion Percentage</th><th style='border:1px solid #000;'>TestCase Ids</th></tr>"
 for feature_url in "${!feature_map[@]}"; do
   total_stories=${feature_map["$feature_url"]}
   done_stories=${feature_status_count["$feature_url"]}
@@ -118,8 +119,8 @@ for feature_url in "${!feature_map[@]}"; do
   testcaseids=$(echo "${feature_testcaseids_map["$feature_url"]}" | sed 's/^,//')
   # Remove leading @ from each TestCaseId
   clean_testcaseids=$(echo "$testcaseids" | sed 's/@//g')
-  html_table="${html_table}<tr><td>${feature_url}</td><td>${feature_summary}</td><td>${completion_percentage}%</td><td>${clean_testcaseids}</td></tr>"
-  done
+  html_table="${html_table}<tr style='border:1px solid #000;'><td style='border:1px solid #000;'>${feature_url}</td><td style='border:1px solid #000;'>${feature_summary}</td><td style='border:1px solid #000;'>${completion_percentage}%</td><td style='border:1px solid #000;'>${clean_testcaseids}</td></tr>"
+done
 html_table="${html_table}</table>"
 
 # Escape special characters in the HTML table
