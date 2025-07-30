@@ -125,7 +125,7 @@ html_table="${html_table}</table>"
 # Escape special characters in the HTML table
 escaped_html_table=$(echo "$html_table" | sed 's/[\*]/\\*/g' | sed 's/[\_]/\\_/g')
 full_html="${style_block}${escaped_html_table}"
-encoded_html=$(echo "$full_html" | base64)
+encoded_html=$(echo "$full_html" | base64 | tr -d '\n')
 echo $encoded_html
 # Export the escaped HTML table to the GitHub environment
 echo "Exporting HTML table to GitHub environment..."
