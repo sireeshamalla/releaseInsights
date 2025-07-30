@@ -109,7 +109,7 @@ style_block="<style>
 # Display the results
 echo "Generating HTML table..."
 html_table="<table style='border-collapse:collapse; width:100%;'>"
-html_table="${html_table}<tr><th style='border:1px solid #000;'>Feature</th><th style='border:1px solid #000;'>Summary</th><th style='border:1px solid #000;'>Completion Percentage</th><th style='border:1px solid #000;'>TestCase Ids</th></tr>"
+html_table="${html_table}<tr><th style='border:1px solid #000; background-color:#e3f2fd;'>Feature</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Summary</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Completion Percentage</th><th style='border:1px solid #000; background-color:#e3f2fd;'>TestCase Ids</th></tr>"
 for feature_url in "${!feature_map[@]}"; do
   total_stories=${feature_map["$feature_url"]}
   done_stories=${feature_status_count["$feature_url"]}
