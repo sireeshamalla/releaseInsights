@@ -44,7 +44,7 @@ jobs:
       - name: Prepare HTML Table
         id: prepare_table
         run: |
-          summary_table="<table border='1'><tr><th>File</th><th>Summary</th></tr>"
+          summary_table="<table style='border-collapse:collapse; width:100%;'><tr><th style='border:1px solid #000; background-color:#e3f2fd;'>File</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Summary</th></tr>"
           while IFS='=' read -r file summary; do
             # Remove the "summary_map_" prefix from the file name
             file=$(echo "$file" | sed 's/^summary_map_//')
