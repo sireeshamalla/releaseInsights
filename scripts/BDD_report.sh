@@ -70,13 +70,7 @@ for row in "${rows[@]}"; do
     failed_ids="${failed_ids%,}"
     not_ran_ids="${not_ran_ids%,}"
     echo "[DEBUG] After trimming commas, feature:$feature, Passed: $passed_ids, Failed: $failed_ids, Not Ran: $not_ran_ids"
-    summary_table="${summary_table}<tr style='border:1px solid #000;'>
-      <td style='border:1px solid #000;'>${feature}</td>
-      <td style='border:1px solid #000;'>${all_ids}</td>
-      <td style='border:1px solid #000;'>${passed_ids}</td>
-      <td style='border:1px solid #000;'>${failed_ids}</td>
-      <td style='border:1px solid #000;'>${not_ran_ids}</td>
-    </tr>"
+    summary_table="${summary_table}<tr style='border:1px solid #000;'><td style='border:1px solid #000;'>${feature}</td><td style='border:1px solid #000;'>${all_ids}</td><td style='border:1px solid #000;'>${passed_ids}</td><td style='border:1px solid #000;'>${failed_ids}</td><td style='border:1px solid #000;'>${not_ran_ids}</td></tr>"
     echo "[DEBUG] inside loop Final summary_table: $summary_table"
   done
 
