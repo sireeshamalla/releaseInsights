@@ -104,7 +104,7 @@ done
 style_block="<style>
   .table-header { background-color: #1a73e8; color: #fff; font-weight: bold; text-align: left; }
   table { border-collapse: collapse; width: 100%; }
-  td, th { border: 1px solid #ddd; padding: 8px; }
+  td, th { border: 1px solid #000; padding: 8px; }
 </style>"
 # Display the results
 echo "Generating HTML table..."
