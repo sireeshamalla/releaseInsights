@@ -30,7 +30,7 @@ jobs:
         id: sonar_metrics
         run: |
           SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
-          SONAR_PROJECT_KEY="devgenie"
+          SONAR_PROJECT_KEY="release-insights"
           SONAR_HOST_URL="https://localhost:9000"
           METRICS="coverage,code_smells"
           SONAR_BRANCH="${{ env.latest_branch }}"
