@@ -26,6 +26,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Set SonarQube Variables
+        run: |
+          echo "SONAR_PROJECT_KEY=release-insights" >> $GITHUB_ENV
+          echo "SONAR_HOST_URL=https://localhost:9000" >> $GITHUB_ENV
+          echo "METRICS=coverage,code_smells" >> $GITHUB_ENV
+          echo "SONAR_BRANCH=main" >> $GITHUB_ENV
+
       - name: Fetch SonarQube Metrics
         id: sonar_metrics
         run: |
