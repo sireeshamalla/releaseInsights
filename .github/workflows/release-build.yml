@@ -26,6 +26,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Fetch SonarQube Metrics
+        id: sonar_metrics
+        run: |
+          SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
+          SONAR_PROJECT_KEY="devgenie"
+          SONAR_HOST_URL="https://localhost:9000"
+          METRICS="coverage,code_smells"
+          SONAR_BRANCH="${{ env.latest_branch }}"
+          response=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/measures/component?component=$SONAR_PROJECT_KEY&metricKeys=$METRICS&branch=$SONAR_BRANCH")          coverage=$(echo $response | jq -r '.component.measures[] | select(.metric=="coverage") | .value')
+          code_smells=$(echo $response | jq -r '.component.measures[] | select(.metric=="code_smells") | .value')
+          echo "sonar_coverage=$coverage" >> $GITHUB_ENV
+          echo "sonar_code_smells=$code_smells" >> $GITHUB_ENV
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Fetch Jira Stories for Latest Branch
         id: fetch_stories
         run: ./scripts/Feature_summary.sh
@@ -111,6 +126,9 @@ jobs:
                 ${{ env.FEATURE_HTML_TABLE }}
               </table>
             </div>
+            <h2>SonarQube Analysis</h2>
+            <p>Coverage: ${{ env.sonar_coverage }}%</p>
+            <p>Code Smells: ${{ env.sonar_code_smells }}</p>
             <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
             <h2>Karate Testcase Summary</h2>
