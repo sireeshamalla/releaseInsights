@@ -51,7 +51,7 @@ jobs:
           echo "sonar_code_smells=$code_smells" >> $GITHUB_ENV
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: release-insights
+          SONAR_PROJECT_KEY: devgenie
           SONAR_HOST_URL: https://localhost:9000
           METRICS: coverage,code_smells
           SONAR_BRANCH: main
