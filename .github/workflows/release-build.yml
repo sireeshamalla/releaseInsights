@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set execute permissions
-        run: chmod +x ./scripts/release_analysis.sh ./scripts/Feature_summary.sh ./scripts/call_gemini_stories_summary.sh ./scripts/call_gemini.sh ./scripts/BDD_report.sh
+        run: chmod +x ./scripts/release_analysis.sh ./scripts/Feature_summary.sh ./scripts/call_gemini_stories_summary.sh ./scripts/call_gemini.sh ./scripts/BDD_report.sh ./scripts/fetch_sonarcloud_metrics.sh
 
       - name: Run Release Analysis
         run: ./scripts/release_analysis.sh
@@ -35,20 +35,7 @@ jobs:
 
       - name: Fetch SonarCloud Metrics
         id: sonar_metrics
-        run: |
-          echo "SONAR_TOKEN: $SONAR_TOKEN"
-          echo "SONAR_PROJECT_KEY: $SONAR_PROJECT_KEY"
-          echo "SONAR_HOST_URL: $SONAR_HOST_URL"
-          echo "METRICS: $METRICS"
-          echo "SONAR_BRANCH: $SONAR_BRANCH"
-          response=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/measures/component?component=$SONAR_PROJECT_KEY&metricKeys=$METRICS&branch=$SONAR_BRANCH")
-          echo "SonarCloud API response: $response"
-          coverage=$(echo $response | jq -r '.component.measures[] | select(.metric=="coverage") | .value')
-          code_smells=$(echo $response | jq -r '.component.measures[] | select(.metric=="code_smells") | .value')
-          echo "Extracted coverage: $coverage"
-          echo "Extracted code_smells: $code_smells"
-          echo "sonar_coverage=$coverage" >> $GITHUB_ENV
-          echo "sonar_code_smells=$code_smells" >> $GITHUB_ENV
+        run: ./scripts/fetch_sonarcloud_metrics.sh
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PROJECT_KEY: releaseInsights
