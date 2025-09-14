@@ -38,10 +38,10 @@ jobs:
         run: ./scripts/fetch_sonarcloud_metrics.sh
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: releaseInsights
+          SONAR_PROJECT_KEY: sireeshamalla_releaseInsights
           SONAR_HOST_URL: https://sonarcloud.io
           METRICS: coverage,code_smells
-          SONAR_BRANCH: Release 25.04.28
+          SONAR_BRANCH: main
 
       - name: Fetch Jira Stories for Latest Branch
         id: fetch_stories
