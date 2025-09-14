@@ -26,14 +26,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Set SonarQube Variables
+      - name: Set SonarCloud Variables
         run: |
-          echo "SONAR_PROJECT_KEY=release-insights" >> $GITHUB_ENV
-          echo "SONAR_HOST_URL=https://localhost:9000" >> $GITHUB_ENV
+          echo "SONAR_PROJECT_KEY=releaseInsights" >> $GITHUB_ENV
+          echo "SONAR_HOST_URL=https://sonarcloud.io" >> $GITHUB_ENV
           echo "METRICS=coverage,code_smells" >> $GITHUB_ENV
-          echo "SONAR_BRANCH=main" >> $GITHUB_ENV
+          echo "SONAR_BRANCH=Release 25.04.28" >> $GITHUB_ENV
 
-      - name: Fetch SonarQube Metrics
+      - name: Fetch SonarCloud Metrics
         id: sonar_metrics
         run: |
           echo "SONAR_TOKEN: $SONAR_TOKEN"
@@ -41,8 +41,8 @@ jobs:
           echo "SONAR_HOST_URL: $SONAR_HOST_URL"
           echo "METRICS: $METRICS"
           echo "SONAR_BRANCH: $SONAR_BRANCH"
-          response=$(curl -v -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/measures/component?component=$SONAR_PROJECT_KEY&metricKeys=$METRICS&branch=$SONAR_BRANCH")
-          echo "SonarQube API response: $response"
+          response=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/measures/component?component=$SONAR_PROJECT_KEY&metricKeys=$METRICS&branch=$SONAR_BRANCH")
+          echo "SonarCloud API response: $response"
           coverage=$(echo $response | jq -r '.component.measures[] | select(.metric=="coverage") | .value')
           code_smells=$(echo $response | jq -r '.component.measures[] | select(.metric=="code_smells") | .value')
           echo "Extracted coverage: $coverage"
@@ -51,10 +51,10 @@ jobs:
           echo "sonar_code_smells=$code_smells" >> $GITHUB_ENV
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: devgenie
-          SONAR_HOST_URL: https://localhost:9000
+          SONAR_PROJECT_KEY: releaseInsights
+          SONAR_HOST_URL: https://sonarcloud.io
           METRICS: coverage,code_smells
-          SONAR_BRANCH: main
+          SONAR_BRANCH: Release 25.04.28
 
       - name: Fetch Jira Stories for Latest Branch
         id: fetch_stories
