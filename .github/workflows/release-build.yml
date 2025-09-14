@@ -128,9 +128,28 @@ jobs:
                 ${{ env.FEATURE_HTML_TABLE }}
               </table>
             </div>
-            <h2>SonarQube Analysis</h2>
-            <p>Coverage: ${{ env.sonar_coverage }}%</p>
-            <p>Code Smells: ${{ env.sonar_code_smells }}</p>
+            <h2>Code Quality Reports</h2>
+            <div style="overflow-x:auto;">
+              <table style="border-collapse:collapse; width:100%;">
+                <tr>
+                  <th style="border:1px solid #000; background-color:#e3f2fd;">SonarQube</th>
+                  <th style="border:1px solid #000; background-color:#e3f2fd;">Black Duck</th>
+                  <th style="border:1px solid #000; background-color:#e3f2fd;">Checkmarx</th>
+                </tr>
+                <tr>
+                  <td style="border:1px solid #000;">
+                    Coverage: ${{ env.sonar_coverage }}%<br>
+                    Code Smells: ${{ env.sonar_code_smells }}
+                  </td>
+                  <td style="border:1px solid #000;">
+                    ${{ env.blackduck_report }}
+                  </td>
+                  <td style="border:1px solid #000;">
+                    ${{ env.checkmarx_report }}
+                  </td>
+                </tr>
+              </table>
+            </div>
             <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
             <h2>Karate Testcase Summary</h2>

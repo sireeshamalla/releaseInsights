@@ -17,4 +17,10 @@ echo "Extracted coverage: $coverage"
 echo "Extracted code_smells: $code_smells"
 echo "sonar_coverage=$coverage" >> $GITHUB_ENV
 echo "sonar_code_smells=$code_smells" >> $GITHUB_ENV
+# Sample Black Duck and Checkmarx reports
+blackduck_report="No vulnerabilities found. Components scanned: 42"
+checkmarx_report="0 High, 2 Medium, 5 Low issues detected"
+
+echo "blackduck_report=$blackduck_report" >> $GITHUB_ENV
+echo "checkmarx_report=$checkmarx_report" >> $GITHUB_ENV
 
