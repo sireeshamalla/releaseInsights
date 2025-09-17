@@ -1,0 +1,115 @@
+Here are the detailed notes for the "HLD: Caching - 1" video class from :
+
+System Design: Caching
+
+Agenda:
+
+Application Server Layer
+
+Caching:
+
+Where to cache?
+
+Invalidation strategies
+
+Eviction strategies
+
+Local caching case study
+
+1. App Server and Decoupling Code & Storage
+When you access a website, your browser first contacts the DNS to find the website’s IP address.
+
+Scale requires distributing requests across many machines—load balancers and sharding (via consistent hashing) become necessary.
+
+Old Model: Both code and storage on the same machine.
+
+Problems:
+
+Tight coupling makes code deployments harder (can cause downtime).
+
+Fewer resources for the code, as storage also shares resources.
+
+Ideal Model: Decouple code and storage for efficiency, result in addition of latency but better scaling.
+
+App Servers: Machines that store only code (stateless, easily scalable).
+
+2. What is Caching?
+Caching means storing things in a faster-access memory/location, so data can be fetched quickly.
+
+Caching can occur at different levels:
+
+Browser (In-Browser) Caching:
+
+Stores DNS results, static images/scripts locally for faster access on repeat visits.
+
+CDN (Content Delivery Network):
+
+Why? To deliver images/media from nearby servers for users across the globe.
+
+Examples: Akamai, Cloudflare, AWS CloudFront, Fastly.
+
+CDN ensures fast delivery by having user requests handled by the nearest server.
+
+Techniques: Integration with ISPs, Anycast routing.
+
+Local Caching:
+
+Data cached on application servers to reduce database hits.
+
+Global Caching: (To be discussed in the next class)
+
+E.g. Redis, Memcache for fast fetching of data in memory.
+
+3. Problems Related to Caching
+Cache is limited in size
+
+Cache is not the actual data source
+
+Staleness: Data in cache may become outdated if the database source changes.
+
+Full cache: Not enough room for all data, so some has to be removed.
+
+4. Solutions & Strategies
+A. Cache Invalidation
+TTL (Time to Live):
+
+Each cache entry is valid for only a fixed period.
+
+After expiry, data is removed and fetched again from the main source.
+
+Keeping Cache & DB in Sync
+
+Write-through cache: Data written to cache first, then to the database. Good for read-heavy systems.
+
+Write-back cache: Data written to cache and success returned; database is updated asynchronously later. Good for analytics but not for critical data.
+
+Write-around cache: Writes bypass cache, go directly to the database. Cache is synced via TTL or similar strategies.
+
+B. Cache Eviction
+When cache is full, old data needs removal.
+
+Eviction Strategies:
+
+FIFO (First In, First Out)
+
+LRU (Least Recently Used)
+
+LIFO (Last In, First Out)
+
+MRU (Most Recently Used)
+
+Choose the best strategy based on which data is most likely to be accessed again (aim for high cache hit rate).
+
+5. For Next Class
+Assignment: Invalidate local cache on App Server when test data changes.
+
+How does Facebook’s newsfeed return quickly? (Hint: Advanced caching, will be discussed.)
+
+Summary
+It’s better to separate application code and database storage.
+
+Caching is essential for speed—can be done at browser, CDN, local server, or in-memory cache.
+
+Handle cache invalidation and eviction carefully to avoid staleness and overflowing cache.
+
+Use strategies like TTL, write-through/write-back/write-around, and proper eviction methods.
