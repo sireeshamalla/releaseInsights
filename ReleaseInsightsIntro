@@ -1,0 +1,51 @@
+Release insights pitch
+
+Opening & Context
+
+
+Briefly introduce yourself and the challenge of scattered release quality data.
+Today, when we prepare for a release, important quality and security information is spread across different tools and reports. This means developers, testers, and managers have to spend extra time searching for the right data, which increases release process and the risk of missing issues. In our current process it is very hard to get a quick, complete view of release quality.
+
+The Problem
+Explain current pain points: multiple tools, manual checks, risk of missing issues, time-consuming for all stakeholders.
+
+Right now, release quality information is scattered across different tools like SonarQube, Black Duck, and Jira. Each tool has its own report and format, so team members have to manually check each one to find the details they need. This takes extra time, increases the chance of missing important issues, and makes it harder for everyone to get a clear picture of the release quality.
+
+The Solution
+Present your unified, automated release report idea.
+Show the architecture diagram and give a high-level overview.
+How It Works
+Our solution is to create a single, automated release report that brings together all the important information from different tools into one place. Instead of checking multiple reports, everyone gets one clear email with:
+	Code quality and security results (from SonarQube, Black Duck, Checkmarx)
+	Jira story updates and feature summaries
+	Test results
+	An AI-generated summary of code changes
+The process is fully automated using GitHub Actions. When code is pushed to a release branch, the workflow collects all the data, formats it into an easy-to-read HTML email, and sends it to the team. This saves time, reduces manual work, and makes it easy for everyone to see the full release picture at a glance.
+
+
+PlantUML diagram
+Architecture diagram explanation:
+The process starts when a developer pushes code to a release branch in the GitHub repository. This action triggers a GitHub Actions workflow. The workflow automatically gathers data from several tools: SonarQube for code quality, Black Duck and Checkmarx for security, Jira for story updates, and an AI service for code summaries.
+The system fetches all Karate test cases linked to each Jira Feature. It then checks which of these test cases were actually executed by comparing them with the BDD report. The final report clearly shows:
+Which test cases were validated (executed and passed)
+Which test cases failed
+Which test cases were not validated (not executed at all)
+This gives the Product Owner a clear view of BDD test case coverage and validation status for every Jira Feature in the release.
+
+Finally all the collected results are combined by an HTML Email Generator, which creates a clear, unified release report. Finally, the report is sent to stakeholders by email, giving everyone a complete view of the release quality in one place. This automation saves time, reduces manual work, and lowers the risk of missing important issues.
+
+
+Demo
+Show a real or recorded pipeline run.
+Open the release summary email and highlight:
+	Unified code quality table
+	Feature summary
+	AI-generated code changes
+	Test results
+
+Advantages
+Faster release validation process
+Improved transparency for all roles
+Reduced risk and better audit readiness
+Time savings and easier onboarding
+Scalable and supports continuous improvement
