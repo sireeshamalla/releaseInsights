@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set execute permissions
-        run: chmod +x ./scripts/release_analysis.sh ./scripts/Feature_summary.sh ./scripts/call_gemini_stories_summary.sh ./scripts/call_gemini.sh ./scripts/BDD_report.sh ./scripts/fetch_sonarcloud_metrics.sh
+        run: chmod +x ./scripts/release_analysis.sh ./scripts/Feature_summary.sh ./scripts/call_gemini_stories_summary.sh ./scripts/call_gemini.sh ./scripts/BDD_report.sh ./scripts/fetch_sonarcloud_metrics.sh ./scripts/karate-summary.sh
 
       - name: Run Release Analysis
         run: ./scripts/release_analysis.sh
@@ -103,6 +103,9 @@ jobs:
       - name: Karate Testcase Summary Table
         run: ./scripts/BDD_report.sh
 
+      - name: Karate Testcase Summary Table
+        run: ./scripts/karate-summary.sh
+
       - name: Decode Feature HTML Table
         run: |
           FEATURE_HTML_TABLE=$(echo "${{ env.feature_html_table }}" | base64 --decode)
@@ -122,7 +125,7 @@ jobs:
           from: ${{ secrets.GMAIL_USERNAME }}
           content_type: text/html
           html_body: |
-            <h2>Feature Summary</h2>
+            <h2>Jira Feature Summary</h2>
             <div style="overflow-x:auto;">
               <table style="border-collapse:collapse; width:100%;">
                 ${{ env.FEATURE_HTML_TABLE }}
@@ -152,7 +155,7 @@ jobs:
             </div>
             <h2>Code changes Summary</h2>
             <p>${{ env.formatted_gemini_summary }}</p>
-            <h2>Karate Testcase Summary</h2>
-            ${{ env.karate_feature_testcase_status_table }}
+            <h2>Karate Summary</h2>
+            ${{ env.karate_summary_table }}
             <h2>Code Changes Details</h2>
             ${{ env.formatted_summary_table }}
