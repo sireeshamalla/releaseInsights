@@ -113,6 +113,9 @@ jobs:
           echo "$FEATURE_HTML_TABLE" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Print Karate summary table
+        run: echo -e "${{ env.karate_summary_table }}"
+
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
