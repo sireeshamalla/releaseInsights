@@ -1,6 +1,7 @@
 #!/bin/bash
 KARATE_REPORT_PATH="target/karate-reports/karate-summary.json"
 
+
 total_features=$(jq '.features | length' "$KARATE_REPORT_PATH")
 total_scenarios=$(jq '[.features[].scenarios[]] | length' "$KARATE_REPORT_PATH")
 passed=$(jq '[.features[].scenarios[] | select(.status=="passed")] | length' "$KARATE_REPORT_PATH")
