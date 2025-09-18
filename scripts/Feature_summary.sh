@@ -125,6 +125,7 @@ for feature_url in "${!feature_map[@]}"; do
 done
 html_table="${html_table}</table>"
 
+
 # Escape special characters in the HTML table
 escaped_html_table=$(echo "$html_table" | sed 's/[\*]/\\*/g' | sed 's/[\_]/\\_/g')
 full_html="${style_block}${escaped_html_table}"

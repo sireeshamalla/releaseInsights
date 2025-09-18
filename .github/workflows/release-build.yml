@@ -93,7 +93,6 @@ jobs:
         run: |
             formatted_gemini_summary=$(echo "${{ env.gemini_summary }}" | sed 's/\\n/<br>/g')
             echo "formatted_gemini_summary=$formatted_gemini_summary" >> $GITHUB_ENV
-      
 
       - name: Format Summary Table
         run: |
