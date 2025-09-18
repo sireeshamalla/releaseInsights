@@ -108,6 +108,7 @@ style_block="<style>
 </style>"
 # Display the results
 
+
 echo "Generating HTML table..."
 html_table="<table style='border-collapse:collapse; width:100%;'>"
 html_table="${html_table}<tr><th style='border:1px solid #000; background-color:#e3f2fd;'>Feature</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Summary</th><th style='border:1px solid #000; background-color:#e3f2fd;'>Completion Percentage</th></tr>"
